@@ -1,0 +1,12 @@
+Django==1.11.9
+django-suit==0.2.25
+djangorestframework==3.5.3
+djangorestframework-recursive==0.1.2
+#http://getblimp.github.io/django-rest-framework-jwt/
+djangorestframework-jwt==1.11.0
+python-docx==0.8.6
+#beautifulsoup4==4.4.0
+#html5lib==1.0b8
+PyYAML==3.12
+django-rest-swagger==2.1.1
+pypandoc==1.4
