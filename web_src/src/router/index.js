@@ -35,6 +35,12 @@ export const constantRouterMap = [
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
+  },
+  { 
+    path: '/view/:id', 
+    name: 'Doc-View', 
+    component: () => import('@/views/doc/view'), 
+    hidden: true 
   }
 ]
 
@@ -57,13 +63,6 @@ export const asyncRouterMap = [
         name: 'Doc-Create',
         component: () => import('@/views/doc/create'),
         meta: { title: '添加文档', icon: 'new-markdown' }
-      },
-      {
-        path: 'view/:id',
-        name: 'Doc-View',
-        component: () => import('@/views/doc/view'),
-        meta: { title: '查看文档', icon: 'table' },
-        hidden: true
       }
     ]
   },
