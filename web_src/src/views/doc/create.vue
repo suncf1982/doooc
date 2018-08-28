@@ -9,7 +9,7 @@
             <mavon-editor v-model="addForm.content"/>
         </el-form-item>
         <el-form-item label="">
-            <el-select v-model="addForm.tech_stack" clearable placeholder="请选择技术栈">
+            <el-select v-model="addForm.tech_stack" clearable size="small" placeholder="请选择技术栈">
                 <el-option
                     v-for="item in techStackOptions"
                     :key="item.value"
@@ -17,6 +17,11 @@
                     :value="item.value">
                 </el-option>
             </el-select>
+            <el-tag v-for="tag in addForm.tags" :key="tag" closable @close="onRemoveTag(tag)" :disable-transitions="true" style="margin-right: 5px">{{tag}}</el-tag>
+            <el-input v-show="addingTag" placeholder="添加标签" v-model="newTag" clearable size="small" style="width: 120px;"></el-input>
+            <el-button v-show="!addingTag" @click.native="onAddTag()" type="primary" icon="el-icon-plus" size="mini" title="添加标签" circle></el-button>
+            <el-button v-show="addingTag" @click.native="onConfirmAddTag()" type="success" icon="el-icon-check" size="mini" title="确定" circle></el-button>
+            <el-button v-show="addingTag" @click.native="onCancelAddTag()" type="danger" icon="el-icon-close" size="mini" title="取消" circle></el-button>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click.native="onSubmit('form')">保存</el-button>
@@ -33,7 +38,8 @@ let form = {
   title: "",
   author: "",
   content: "",
-  tech_stack: ""
+  tech_stack: "",
+  tags: []
 };
 export default {
   name: "createDoc",
@@ -47,14 +53,31 @@ export default {
   data() {
     return {
       addForm: { ...form },
-      addLoading: false
+      addLoading: false,
+      addingTag: false,
+      newTag: '',
     };
   },
   methods: {
     fetchData() {
       getDocDetail(this.id).then(res => {
-        this.addForm = {...res};
-      })
+        this.addForm = { ...res };
+      });
+    },
+    onAddTag() {
+      this.addingTag = true;
+    },
+    onConfirmAddTag() {
+      this.addForm.tags.push(this.newTag);
+      this.newTag = '';
+      this.addingTag = false;
+    },
+    onCancelAddTag() {
+      this.newTag = '';
+      this.addingTag = false;
+    },
+    onRemoveTag(tag) {
+      this.addForm.tags.splice(this.addForm.tags.indexOf(tag), 1);
     },
     onSubmit: function(formName) {
       this.$refs[formName].validate(valid => {
@@ -105,7 +128,4 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.create-doc {
-  margin: 30px;
-}
 </style>

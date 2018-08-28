@@ -72,6 +72,7 @@ export const asyncRouterMap = [
     redirect: '/example/table',
     name: 'Example',
     meta: { title: 'Example', icon: 'example' },
+    hidden: true,
     children: [
       {
         path: 'table',
@@ -91,6 +92,7 @@ export const asyncRouterMap = [
   {
     path: '/form',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -104,6 +106,7 @@ export const asyncRouterMap = [
   {
     path: '/nested',
     component: Layout,
+    hidden: true,
     redirect: '/nested/menu1',
     name: 'Nested',
     meta: {
@@ -161,6 +164,7 @@ export const asyncRouterMap = [
 
   {
     path: 'external-link',
+    hidden: true,
     component: Layout,
     children: [
       {

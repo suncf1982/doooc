@@ -23,6 +23,9 @@ TECH_STACK = (
     ('JAVA', 'JAVA'),
     ('PYTHON', 'PYTHON'),
     ('PHP', 'PHP'),
+    ('CACHE', '缓存'),
+    ('BIGDATA', '大数据'),
+    ('DATABASE', '数据库'),
 )
 
 

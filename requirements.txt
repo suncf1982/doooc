@@ -10,3 +10,5 @@ python-docx==0.8.6
 PyYAML==3.12
 django-rest-swagger==2.1.1
 pypandoc==1.4
+django-taggit==0.23.0
+django-taggit-serializer==0.1.7

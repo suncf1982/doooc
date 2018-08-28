@@ -60,6 +60,7 @@ class DocList(generics.ListCreateAPIView):
         search_word = self.request.query_params.get('search_word', None)
         author = self.request.query_params.get('author', '')
         tech_stack = self.request.query_params.get('tech_stack', '')
+        tag = self.request.query_params.get('tag', '')
 
         if search_word is not None and search_word:
             queryset = queryset.filter(
@@ -68,6 +69,9 @@ class DocList(generics.ListCreateAPIView):
             queryset = queryset.filter(author__id=author)
         if tech_stack != '':
             queryset = queryset.filter(tech_stack=tech_stack)
+        if tag != '':
+            queryset = queryset.filter(tags__name__in=[tag])
+        
         return queryset
 
 
