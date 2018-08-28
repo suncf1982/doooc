@@ -62,9 +62,10 @@
       <div slot="title">
         <a :href="downloadMdUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">MD</el-button></a>
         <a :href="downloadHtmlUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">HTML</el-button></a>
-        <a :href="downloadPdfUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">PDF</el-button></a>
+        <!-- <a :href="downloadPdfUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">PDF</el-button></a> -->
         <a :href="downloadDocxUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">DOCX</el-button></a>
-        <el-button type="primary" :disabled="true" icon="el-icon-download">PPT</el-button>
+        <el-button type="primary" :disabled="true" title="开发中" icon="el-icon-download">PDF</el-button>
+        <el-button type="primary" :disabled="true" title="开发中" icon="el-icon-download">PPT</el-button>
       </div>
       <mavon-editor 
         v-model="viewedDoc.content"
