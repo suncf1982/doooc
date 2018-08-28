@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div :class="{ 'search-position-normal': !isSearching, 'search-position-top': isSearching }">
       <h2 :class="{title: !isSearching, 'title-hide': isSearching}">全&nbsp;文&nbsp;检&nbsp;索&nbsp;<i class="el-icon-search"></i></h2>
-      <el-input placeholder="请输入关键字" v-model.trim="searchedText" class="input-with-select">
+      <el-input placeholder="请输入关键字" v-model.trim="searchedText" @keyup.enter.native="onSearch" class="input-with-select">
         <el-button @click.native="onSearch" slot="append" icon="el-icon-search"></el-button>
       </el-input>
     </div>
