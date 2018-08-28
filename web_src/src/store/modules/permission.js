@@ -1,13 +1,13 @@
-import { asyncRouterMap, constantRouterMap } from '@/router/index'
+import { asyncRouterMap, constantRouterMap } from '@/router'
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
  * @param roles
  * @param route
  */
-function hasPermission(groups, route) {
-  if (route.meta && route.meta.group) {
-    return groups.some(group => route.meta.group.indexOf(group.value) >= 0)
+function hasPermission(roles, route) {
+  if (route.meta && route.meta.roles) {
+    return roles.some(role => route.meta.roles.indexOf(role) >= 0)
   } else {
     return true
   }
@@ -16,13 +16,13 @@ function hasPermission(groups, route) {
 /**
  * 递归过滤异步路由表，返回符合用户角色权限的路由表
  * @param asyncRouterMap
- * @param groups
+ * @param roles
  */
-function filterAsyncRouter(asyncRouterMap, groups) {
+function filterAsyncRouter(asyncRouterMap, roles) {
   const accessedRouters = asyncRouterMap.filter(route => {
-    if (hasPermission(groups, route)) {
+    if (hasPermission(roles, route)) {
       if (route.children && route.children.length) {
-        route.children = filterAsyncRouter(route.children, groups)
+        route.children = filterAsyncRouter(route.children, roles)
       }
       return true
     }
@@ -34,30 +34,23 @@ function filterAsyncRouter(asyncRouterMap, groups) {
 const permission = {
   state: {
     routers: constantRouterMap,
-    addRouters: [],
-    isAdmin: false
+    addRouters: []
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
-    },
-    SET_ADMIN: (state, isAdmin) => {
-      state.isAdmin = isAdmin
     }
   },
   actions: {
     GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
-        const { groups } = data
+        const { roles } = data
         let accessedRouters
-        let isAdmin = groups.find((value, index, arr)=>{return value.value==='ADMIN'})
-        commit('SET_ADMIN', isAdmin)
-        
-        if (isAdmin) {
+        if (roles.indexOf('admin') >= 0) {
           accessedRouters = asyncRouterMap
         } else {
-          accessedRouters = filterAsyncRouter(asyncRouterMap, groups)
+          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         }
         commit('SET_ROUTERS', accessedRouters)
         resolve()

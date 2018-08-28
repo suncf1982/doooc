@@ -1,7 +1,7 @@
-import fetch from '@/utils/fetch'
+import request from '@/utils/request'
 
 export function getList(params) {
-  return fetch({
+  return request({
     url: '/docs/',
     method: 'get',
     params
@@ -9,14 +9,14 @@ export function getList(params) {
 }
 
 export function get(id) {
-  return fetch({
+  return request({
     url: '/docs/' + id + '/',
     method: 'get'
   })
 }
 
 export function create(data) {
-  return fetch({
+  return request({
     url: '/docs/',
     method: 'post',
     data
@@ -24,7 +24,7 @@ export function create(data) {
 }
 
 export function update(data) {
-  return fetch({
+  return request({
     url: '/docs/' + data.id + '/',
     method: 'put',
     data
@@ -32,17 +32,21 @@ export function update(data) {
 }
 
 export function del(id) {
-  return fetch({
+  return request({
     url: '/docs/' + id + '/',
     method: 'delete'
   })
 }
 
 export function publish(id) {
-  return fetch({
+  return request({
     url: '/docs/publish/' + id + '/',
     method: 'put'
   })
+}
+
+export function downloadMd(id) {
+  return  process.env.BASE_API + '/docs/download/md/' + id + '/'
 }
 
 export function downloadHtml(id) {

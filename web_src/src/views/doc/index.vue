@@ -42,11 +42,12 @@
           {{scope.row.update_at}}
         </template>
       </el-table-column>
-      <el-table-column label="操作" header-align="center" align="center" width="225">
+      <el-table-column label="操作" header-align="center" align="center" width="225" class-name="op">
         <template slot-scope="scope">
           <el-button type="text" @click="handleView(scope.$index, scope.row)"><i class="el-icon-view"></i></el-button>
           <!-- <router-link :to="'/doc/view/'+scope.row.id"><i class="el-icon-view"></i></router-link> -->
-          <el-button type="text" @click="handleEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
+          <!-- <el-button type="text" @click="handleEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button> -->
+          <router-link :to="{ name: 'Doc-Create', query: { id: scope.row.id }}"><el-button type="text"><i class="el-icon-edit"></i></el-button></router-link>
           <el-button type="text" style="color: #F56C6C;" @click="handleDel(scope.$index, scope.row)"><i class="el-icon-delete"></i></el-button>
           <el-button v-show="!scope.row.published" type="success" size="small" @click="handlePublish(scope.$index, scope.row)">发布</el-button>
         </template>
@@ -59,6 +60,7 @@
       :visible.sync="viewDocDialogVisible"
       :fullscreen="true">
       <div slot="title">
+        <a :href="downloadMdUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">MD</el-button></a>
         <a :href="downloadHtmlUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">HTML</el-button></a>
         <a :href="downloadPdfUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">PDF</el-button></a>
         <a :href="downloadDocxUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">DOCX</el-button></a>
@@ -76,7 +78,7 @@
 </template>
 
 <script>
-import { getList, create, del, update, publish, downloadHtml, downloadPdf, downloadDocx } from "@/api/doc";
+import { getList, create, del, update, publish, downloadMd, downloadHtml, downloadPdf, downloadDocx } from "@/api/doc";
 import { mapGetters } from "vuex";
 import { getToken } from "@/utils/auth";
 
@@ -153,6 +155,9 @@ export default {
         });
       });
     },
+    downloadMdUrl(id) {
+      return downloadMd(id);
+    },
     downloadHtmlUrl(id) {
       return downloadHtml(id);
     },
@@ -179,5 +184,9 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
   .page-doc-index .el-dialog__body {
     padding-top: 5px;
+  }
+
+  .page-doc-index .op .el-button {
+    margin-left: 10px;
   }
 </style>

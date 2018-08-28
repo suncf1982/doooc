@@ -11,7 +11,8 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class GroupsField(serializers.RelatedField):
     def to_representation(self, value):
-        return {'id': value.id, 'value': value.name}
+        # return {'id': value.id, 'value': value.name}
+        return value.name
 
 
 class UserReadonlySerializer(serializers.ModelSerializer):

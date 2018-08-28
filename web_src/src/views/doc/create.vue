@@ -28,7 +28,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { create, update } from "@/api/doc";
+import { get as getDocDetail, create, update } from "@/api/doc";
 let form = {
   title: "",
   author: "",
@@ -37,7 +37,13 @@ let form = {
 };
 export default {
   name: "createDoc",
-  created() {},
+  created() {
+    let id = this.$route.query.id;
+    if (id !== undefined) {
+      this.id = id;
+      this.fetchData();
+    }
+  },
   data() {
     return {
       addForm: { ...form },
@@ -45,13 +51,18 @@ export default {
     };
   },
   methods: {
+    fetchData() {
+      getDocDetail(this.id).then(res => {
+        this.addForm = {...res};
+      })
+    },
     onSubmit: function(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$confirm("确认保存吗？", "提示", {}).then(() => {
             this.addLoading = true;
             let param = Object.assign({}, this.addForm);
-            if (param.id === "" || param.id === undefined) {
+            if (param.id === undefined) {
               create(param).then(res => {
                 this.addLoading = false;
                 //NProgress.done();

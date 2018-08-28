@@ -81,6 +81,13 @@ def publish(request, pk):
 
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+def download_md(request, pk):
+    import pypandoc
+    obj = Doc.objects.get(pk=pk)
+    response = HttpResponse(obj.content)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="%s%s"' % (time.strftime('%Y%m%d%H%M%S',time.localtime(time.time())), ".md")
+    return response
 
 def download_html(request, pk):
     import pypandoc

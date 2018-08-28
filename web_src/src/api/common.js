@@ -1,7 +1,7 @@
-import fetch from '@/utils/fetch'
+import request from '@/utils/request'
 
 export function getDependences(params) {
-  return fetch({
+  return request({
     url: '/dependences/',
     method: 'get',
     params

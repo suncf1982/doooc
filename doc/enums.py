@@ -19,6 +19,7 @@ MONTHS = (
 
 # 技术栈
 TECH_STACK = (
+    ('OTHER', '其它'),
     ('JAVA', 'JAVA'),
     ('PYTHON', 'PYTHON'),
     ('PHP', 'PHP'),
