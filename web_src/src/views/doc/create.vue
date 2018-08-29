@@ -1,11 +1,15 @@
 <template>
   <section>
   <div class="app-container create-doc">
-    <el-form ref="form" :model="addForm" label-position="top" label-width="80px">
-        <el-form-item label="文档标题">
+    <el-form ref="form" :model="addForm"  @keyup.ctrl.83.native.stop.prevent="onSubmit('form')" label-position="top" label-width="80px">
+        <el-form-item label="文档标题" 
+          prop="title"
+          :rules="[{ required: true, message: '标题不能为空'}]">
             <el-input v-model="addForm.title"></el-input>
         </el-form-item>
-        <el-form-item label="">
+        <el-form-item label=""
+          prop="content"
+          :rules="[{ required: true, message: '内容不能为空'}]">
             <mavon-editor v-model="addForm.content"/>
         </el-form-item>
         <el-form-item label="">
@@ -55,7 +59,7 @@ export default {
       addForm: { ...form },
       addLoading: false,
       addingTag: false,
-      newTag: '',
+      newTag: ""
     };
   },
   methods: {
@@ -69,11 +73,11 @@ export default {
     },
     onConfirmAddTag() {
       this.addForm.tags.push(this.newTag);
-      this.newTag = '';
+      this.newTag = "";
       this.addingTag = false;
     },
     onCancelAddTag() {
-      this.newTag = '';
+      this.newTag = "";
       this.addingTag = false;
     },
     onRemoveTag(tag) {
@@ -82,33 +86,31 @@ export default {
     onSubmit: function(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$confirm("确认保存吗？", "提示", {}).then(() => {
-            this.addLoading = true;
-            let param = Object.assign({}, this.addForm);
-            if (param.id === undefined) {
-              create(param).then(res => {
-                this.addLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: "保存成功",
-                  type: "success"
-                });
-
-                this.fetchData();
+          this.addLoading = true;
+          let param = Object.assign({}, this.addForm);
+          if (param.id === undefined) {
+            create(param).then(res => {
+              this.addLoading = false;
+              //NProgress.done();
+              this.$message({
+                message: "保存成功",
+                type: "success"
               });
-            } else {
-              update(param).then(res => {
-                this.addLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: "保存成功",
-                  type: "success"
-                });
 
-                this.fetchData();
+              this.fetchData();
+            });
+          } else {
+            update(param).then(res => {
+              this.addLoading = false;
+              //NProgress.done();
+              this.$message({
+                message: "保存成功",
+                type: "success"
               });
-            }
-          });
+
+              this.fetchData();
+            });
+          }
         } else {
           console.log("error submit!!");
           return false;

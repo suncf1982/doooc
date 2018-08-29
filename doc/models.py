@@ -17,7 +17,7 @@ class Doc(models.Model):
         related_name='doc_authors',
         null=True,
     )
-    tech_stack = models.CharField('技术栈', max_length=50, choices=TECH_STACK)
+    tech_stack = models.CharField('技术栈', max_length=50, choices=TECH_STACK, default='OTHER', null=True, blank=True)
     content = models.TextField('内容')
     tags = TaggableManager(verbose_name="标签")
     published = models.BooleanField('发布', default=False, editable=True)
