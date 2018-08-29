@@ -30,8 +30,8 @@ const app = {
       state.device = device
     },
     DEPENDEDENCES_LOADED: (state, data) => {
-      state.dependencesLoaded = true;
-      state.enums = { ...data.enums };
+      state.dependencesLoaded = true
+      state.enums = { ...data.enums }
     }
   },
   actions: {

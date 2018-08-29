@@ -1,4 +1,4 @@
-from ..models import Doc
+from ..models import Doc, PopularKeyword
 from ..serializers import DocSerializer, DocReadonlySerializer
 
 from django.http import Http404
@@ -63,6 +63,7 @@ class DocList(generics.ListCreateAPIView):
         tag = self.request.query_params.get('tag', '')
 
         if search_word is not None and search_word:
+            PopularKeyword.objects.addKeyword(search_word)
             queryset = queryset.filter(
                 Q(title__contains=search_word) | Q(content__contains=search_word))
         if author != '':

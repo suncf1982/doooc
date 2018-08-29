@@ -29,3 +29,26 @@ class Doc(models.Model):
 
     def get_tags_display(self):
         return self.tags.names()
+
+class PopularKeywordManager(models.Manager):
+    def addKeyword(self, word):
+        if len(word) > 10:
+            return
+        queryset=  self.get_queryset().filter(keyword=word)
+        if len(queryset) == 0:
+            super(PopularKeywordManager, self).create(keyword=word)
+        else:
+            obj = queryset[0]
+            obj.count = obj.count+1
+            obj.save()
+
+class PopularKeyword(models.Model):
+    class Meta:
+        verbose_name = '热门搜索'
+        verbose_name_plural = '热门搜索'
+    keyword = models.CharField('关键则', max_length=200, unique=True)
+    count = models.IntegerField('次数', default=1)
+    update_at = models.DateTimeField('更新日期', editable=False, auto_now=True)
+    objects = PopularKeywordManager()
+    def __str__(self):
+        return self.keyword

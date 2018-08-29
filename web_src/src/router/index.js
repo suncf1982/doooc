@@ -36,11 +36,11 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-  { 
-    path: '/view/:id', 
-    name: 'Doc-View', 
-    component: () => import('@/views/doc/view'), 
-    hidden: true 
+  {
+    path: '/view/:id',
+    name: 'Doc-View',
+    component: () => import('@/views/doc/view'),
+    hidden: true
   }
 ]
 

@@ -45,18 +45,32 @@ export function publish(id) {
   })
 }
 
+export function pupularTags() {
+  return request({
+    url: '/docs/pupulartags/',
+    method: 'get'
+  })
+}
+
+export function pupularKeywords() {
+  return request({
+    url: '/docs/pupularkeywords/',
+    method: 'get'
+  })
+}
+
 export function downloadMd(id) {
-  return  process.env.BASE_API + '/docs/download/md/' + id + '/'
+  return process.env.BASE_API + '/docs/download/md/' + id + '/'
 }
 
 export function downloadHtml(id) {
-  return  process.env.BASE_API + '/docs/download/html/' + id + '/'
+  return process.env.BASE_API + '/docs/download/html/' + id + '/'
 }
 
 export function downloadPdf(id) {
-  return  process.env.BASE_API + '/docs/download/pdf/' + id + '/'
+  return process.env.BASE_API + '/docs/download/pdf/' + id + '/'
 }
 
 export function downloadDocx(id) {
-  return  process.env.BASE_API + '/docs/download/docx/' + id + '/'
+  return process.env.BASE_API + '/docs/download/docx/' + id + '/'
 }
