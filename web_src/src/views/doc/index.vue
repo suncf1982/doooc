@@ -16,7 +16,7 @@
         </el-form>
       </el-col>
 
-      <el-table  v-loading.body="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
+      <el-table v-loading.body="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
         <el-table-column label="标题" header-align="center">
           <template slot-scope="scope">
             {{ scope.row.title }}
@@ -67,7 +67,7 @@
           <el-button :disabled="true" type="primary" title="开发中" icon="el-icon-download">PDF</el-button>
           <el-button :disabled="true" type="primary" title="开发中" icon="el-icon-download">PPT</el-button>
         </div>
-        <mavon-editor 
+        <mavon-editor
           v-model="viewedDoc.content"
           :toolbars-flag="false"
           :subfield="false"
@@ -79,8 +79,8 @@
 </template>
 
 <script>
-import { getList, create, del, update, publish, downloadMd, downloadHtml, downloadPdf, downloadDocx } from "@/api/doc"
-import { mapGetters } from "vuex"
+import { getList, del, publish, downloadMd, downloadHtml, downloadPdf, downloadDocx } from '@/api/doc'
+import { mapGetters } from 'vuex'
 
 export default {
   filters: {
@@ -104,6 +104,16 @@ export default {
       viewDocDialogVisible: false,
       viewedDoc: {
         content: ''
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['enums']),
+    listQuery: function() {
+      return {
+        limit: this.pageSize,
+        offset: (this.page - 1) * this.pageSize,
+        search_word: this.filters.search_word
       }
     }
   },
@@ -139,7 +149,7 @@ export default {
           this.$message({
             message: '删除成功',
             type: 'success'
-          });
+          })
           this.fetchData()
         })
       })
@@ -167,18 +177,8 @@ export default {
     downloadDocxUrl(id) {
       return downloadDocx(id)
     }
-  },
-  computed: {
-    ...mapGetters(['enums']),
-    listQuery: function() {
-      return {
-        limit: this.pageSize,
-        offset: (this.page - 1) * this.pageSize,
-        search_word: this.filters.search_word
-      };
-    }
   }
-};
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

@@ -45,7 +45,7 @@ const form = {
   content: '',
   tech_stack: '',
   tags: []
-};
+}
 export default {
   name: 'CreateDoc',
   data() {
@@ -54,10 +54,10 @@ export default {
       addLoading: false,
       addingTag: false,
       newTag: ''
-    };
+    }
   },
   computed: {
-    ...mapGetters(["enums"]),
+    ...mapGetters(['enums']),
     techStackOptions: function() {
       return Array.from(Object.entries(this.enums.TECH_STACK), function(item) {
         return { value: item[0], label: item[1] }
@@ -124,7 +124,7 @@ export default {
           console.log('error submit!!')
           return false
         }
-      });
+      })
     }
   }
 }

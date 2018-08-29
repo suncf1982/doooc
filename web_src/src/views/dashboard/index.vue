@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div :class="{ 'search-position-normal': !isSearching, 'search-position-top': isSearching }">
       <h2 :class="{title: !isSearching, 'title-hide': isSearching}">全&nbsp;文&nbsp;检&nbsp;索&nbsp;<i class="el-icon-search" /></h2>
-      <el-input placeholder="请输入关键字" class="input-with-select" v-model.trim="searchedText" @keyup.enter.native="onSearch">
+      <el-input v-model.trim="searchedText" placeholder="请输入关键字" class="input-with-select" @keyup.enter.native="onSearch">
         <el-button slot="append" type="primary" icon="el-icon-search" @click.native="onSearch" />
       </el-input>
     </div>
@@ -11,12 +11,12 @@
         <dt class="result-item-title">
           <router-link :to="{ name: 'Doc-View', params: { id: item.id } }" target="_blank">{{ item.title }}</router-link>
         </dt>
-        <dd class="result-item-content" v-html="item.searched"></dd>
+        <dd class="result-item-content" v-html="item.searched" />
         <dd class="result-item-tags">
           <el-tag type="success">作者：<a @click="onSearchAuthor(item.author)">{{ item.author_name }}</a></el-tag>
           <el-tag type="warning">领域：<a @click="onSearchTechStack(item.tech_stack)">{{ item.tech_stack_name }}</a></el-tag>
-          <el-tag  v-for="tag in item.tags" :key="tag" style="margin-right: 4px">
-            <a v-on:click="onSearchTag(tag)"><em>{{ tag }}</em></a>
+          <el-tag v-for="tag in item.tags" :key="tag" style="margin-right: 4px">
+            <a @click="onSearchTag(tag)"><em>{{ tag }}</em></a>
           </el-tag>
         </dd>
         <dd class="result-item-link">
@@ -52,18 +52,6 @@ import { getList as search, pupularTags, pupularKeywords } from '@/api/doc'
 
 export default {
   name: 'Dashboard',
-  computed: {
-    ...mapGetters(['name', 'roles'])
-  },
-  created() {
-    pupularTags().then(res => {
-      this.pupularTags = res
-    });
-
-    pupularKeywords().then(res => {
-      this.pupularKeywords = res
-    })
-  },
   data() {
     return {
       searchedText: '',
@@ -74,7 +62,19 @@ export default {
       total: 0,
       page: 1,
       pageSize: 10
-    };
+    }
+  },
+  computed: {
+    ...mapGetters(['name', 'roles'])
+  },
+  created() {
+    pupularTags().then(res => {
+      this.pupularTags = res
+    })
+
+    pupularKeywords().then(res => {
+      this.pupularKeywords = res
+    })
   },
   methods: {
     onSearch(keyword) {
@@ -91,7 +91,7 @@ export default {
           this.list = response.results
           this.total = response.count
         }
-      );
+      )
     },
     onSearchAuthor(author) {
       this.isSearching = true
@@ -99,7 +99,7 @@ export default {
       search(this.getQuery({ author: author })).then(response => {
         this.list = response.results
         this.total = response.count
-      });
+      })
     },
     onSearchTechStack(techStack) {
       this.isSearching = true
@@ -107,7 +107,7 @@ export default {
       search(this.getQuery({ tech_stack: techStack })).then(response => {
         this.list = response.results
         this.total = response.count
-      });
+      })
     },
     onSearchTag(tag) {
       this.isSearching = true
