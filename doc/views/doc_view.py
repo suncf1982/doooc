@@ -142,6 +142,7 @@ def download_pdf(request, pk):
         settings.BASE_DIR, 'temp/temp.pdf'), extra_args=['--pdf-engine=xelatex', '-V', 'geometry:margin=1.5cm', '-V','mainfont="SimSun"'])
     with open(os.path.join(settings.BASE_DIR, 'temp/temp.pdf'), 'rb') as f:
         c = f.read()
+        
     response = HttpResponse(c)
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="%s%s"' % (
