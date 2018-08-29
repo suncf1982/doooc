@@ -139,7 +139,7 @@ def download_pdf(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
     pypandoc.convert(obj.content, 'pdf', format='md', outputfile=os.path.join(
-        settings.BASE_DIR, 'temp/temp.pdf'), extra_args=['--pdf-engine=xelatex', '-V', 'geometry:margin=1.5cm'])
+        settings.BASE_DIR, 'temp/temp.pdf'), extra_args=['--pdf-engine=xelatex', '-V', 'geometry:margin=1.5cm', '-V','mainfont="SimSun"'])
     with open(os.path.join(settings.BASE_DIR, 'temp/temp.pdf'), 'rb') as f:
         c = f.read()
     response = HttpResponse(c)
