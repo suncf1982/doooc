@@ -150,7 +150,7 @@ def download_pdf(request, pk):
     output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.pdf'
     if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
         pypandoc.convert(obj.content, 'pdf', format='md', outputfile=os.path.join(
-            FILE_CACHE_DIR, output_file_name), extra_args=['--pdf-engine=xelatex', '-V', 'geometry:margin=1.5cm', '-V', 'mainfont="SimSun"'])
+            FILE_CACHE_DIR, output_file_name), extra_args=['--pdf-engine=pdflatex', '-V', 'geometry:margin=1.5cm', '-V', 'mainfont="SimSun"'])
     with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'rb') as f:
         c = f.read()
 
