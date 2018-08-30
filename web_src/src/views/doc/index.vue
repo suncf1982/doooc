@@ -63,8 +63,8 @@
           <a :href="downloadMdUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download" size="small">MD</el-button></a>
           <a :href="downloadHtmlUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download" size="small">HTML</el-button></a>
           <a :href="downloadDocxUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download" size="small">DOCX</el-button></a>
-          <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a>
-          <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPTX</el-button></a>
+          <a :href="downloadPdfUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a>
+          <a :href="downloadPptxUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPTX</el-button></a>
         </div>
         <mavon-editor
           v-model="viewedDoc.content"

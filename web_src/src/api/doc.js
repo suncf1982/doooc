@@ -59,6 +59,13 @@ export function pupularKeywords() {
   })
 }
 
+export function pupularDocs() {
+  return request({
+    url: '/docs/populardocs/',
+    method: 'get'
+  })
+}
+
 export function downloadMd(id) {
   return process.env.BASE_API + '/docs/download/md/' + id + '/'
 }

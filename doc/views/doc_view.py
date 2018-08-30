@@ -1,5 +1,5 @@
 from ..models import Doc, PopularKeyword
-from ..serializers import DocSerializer, DocReadonlySerializer
+from ..serializers import DocSerializer, DocReadonlySerializer, UserKVSerializer
 
 from django.http import Http404
 from rest_framework.views import APIView
@@ -128,6 +128,8 @@ def publish(request, pk):
 def download_md(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
+    obj.download_times = obj.download_times + 1
+    obj.save()
     response = HttpResponse(obj.content)
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="%s%s"' % (
@@ -140,6 +142,8 @@ def download_md(request, pk):
 def download_html(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
+    obj.download_times = obj.download_times + 1
+    obj.save()
     output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.html'
     if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
         output = pypandoc.convert(obj.content, 'html', format='md', extra_args=[
@@ -160,6 +164,8 @@ def download_html(request, pk):
 def download_pdf(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
+    obj.download_times = obj.download_times + 1
+    obj.save()
     output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.pdf'
     if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
         pypandoc.convert(obj.content, 'pdf', format='md', outputfile=os.path.join(
@@ -177,29 +183,26 @@ def download_pdf(request, pk):
 @authentication_classes(())
 @permission_classes(())
 def download_docx(request, pk):
-    import pypandoc
-    obj = Doc.objects.get(pk=pk)
-    output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.docx'
-    if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
-        pypandoc.convert(obj.content, 'docx', format='md', outputfile=os.path.join(
-            FILE_CACHE_DIR, output_file_name))
-    with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'rb') as f:
-        c = f.read()
-    response = HttpResponse(c)
-    response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="%s"' % (
-        output_file_name,)
+    response = download(pk, 'docx')
     return response
 
 
 @authentication_classes(())
 @permission_classes(())
 def download_pptx(request, pk):
-    import pypandoc
+    response = download(pk, 'pptx')
+    return response
+
+
+def download(pk, output_type):
     obj = Doc.objects.get(pk=pk)
-    output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.pptx'
+    obj.download_times = obj.download_times + 1
+    obj.save()
+    output_file_name = obj.update_at.strftime(
+        "%Y%m%d%H%M%S%f") + '.' + output_type
     if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
-        pypandoc.convert(obj.content, 'pptx', format='md', outputfile=os.path.join(
+        import pypandoc
+        pypandoc.convert(obj.content, output_type, format='md', outputfile=os.path.join(
             FILE_CACHE_DIR, output_file_name))
     with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'rb') as f:
         c = f.read()
@@ -207,4 +210,11 @@ def download_pptx(request, pk):
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="%s"' % (
         output_file_name,)
+
     return response
+
+@api_view(['get'])
+def popular_docs(request):
+    queryset = Doc.objects.values('id', 'title').order_by('-download_times')[:5]
+    serializer = UserKVSerializer(queryset, many=True)
+    return Response(serializer.data)

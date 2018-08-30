@@ -20,6 +20,7 @@ class Doc(models.Model):
     tech_stack = models.CharField('技术栈', max_length=50, choices=TECH_STACK, default='OTHER', null=True, blank=True)
     content = models.TextField('内容')
     tags = TaggableManager(verbose_name="标签")
+    download_times = models.IntegerField('下载次数', default=0)
     published = models.BooleanField('发布', default=False, editable=True)
     create_at = models.DateTimeField('创建日期', editable=False, auto_now_add=True)
     update_at = models.DateTimeField('更新日期', editable=False, auto_now=True)

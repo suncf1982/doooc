@@ -42,13 +42,19 @@
           </el-tag>
         </dd>
       </dl>
+      <dl>
+        <dt>最受欢迎</dt>
+        <dd>
+          <router-link v-for="pupularDoc in pupularDocs" :key="pupularDoc.id" :to="{ name: 'Doc-View', params: { id: pupularDoc.id } }" target="_blank" class="doc-title">{{ '&lt;&lt;' + pupularDoc.title + '&gt;&gt;' }}</router-link>
+        </dd>
+      </dl>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getList as search, pupularTags, pupularKeywords } from '@/api/doc'
+import { getList as search, pupularTags, pupularKeywords, pupularDocs } from '@/api/doc'
 
 export default {
   name: 'Dashboard',
@@ -58,6 +64,7 @@ export default {
       isSearching: false,
       pupularTags: [],
       pupularKeywords: [],
+      pupularDocs: [],
       list: [],
       total: 0,
       page: 1,
@@ -74,6 +81,10 @@ export default {
 
     pupularKeywords().then(res => {
       this.pupularKeywords = res
+    })
+
+    pupularDocs().then(res => {
+      this.pupularDocs = res
     })
   },
   methods: {
@@ -216,6 +227,13 @@ export default {
       dd {
         margin-left: 80px;
         line-height: 30px;
+      }
+
+      .doc-title {
+        color: #409eff;
+        font-size: 12px;
+        margin-right: 10px;
+        text-decoration: underline;
       }
     }
   }

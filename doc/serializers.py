@@ -24,6 +24,11 @@ class DocReadonlySerializer(TaggitSerializer, serializers.ModelSerializer):
         model = Doc
         fields = '__all__'
 
+class UserKVSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Doc
+        fields = ('id', 'title')
+
 class PopularKeywordSerializer(serializers.ModelSerializer):
     update_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', allow_null=True, required=False)
     class Meta:
