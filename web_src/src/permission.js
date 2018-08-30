@@ -10,7 +10,6 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 const whiteList = ['Login', 'Doc-View']// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
-  console.log(to)
   NProgress.start() // start progress bar
   if (getToken()) { // determine if there has token
     /* has token*/

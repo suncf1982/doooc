@@ -123,7 +123,8 @@ export default {
                 message: '保存成功',
                 type: 'success'
               })
-
+              this.id = res.id
+              this.fetchData()
               this.$router.push({ path: '/doc/create', query: { id: res.id }})
             })
           } else {
