@@ -78,7 +78,6 @@ export default {
   },
   methods: {
     onSearch(keyword) {
-      debugger
       if (Object.prototype.toString.call(keyword) === '[object String]') {
         this.searchedText = keyword
       }
