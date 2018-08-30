@@ -2,19 +2,19 @@
   <section>
     <div class="app-container view-doc">
       <div style="margin-bottom: 20px;">
-        <a :href="downloadMdUrl(document.id)" download><el-button type="primary" icon="el-icon-download">MD</el-button></a>
-        <a :href="downloadHtmlUrl(document.id)" download><el-button type="primary" icon="el-icon-download">HTML</el-button></a>
-        <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download">DOCX</el-button></a>
-        <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download">PDF</el-button></a>
-        <!-- <el-button type="primary" :disabled="true" title="开发中" icon="el-icon-download">PDF</el-button> -->
-        <el-button :disabled="true" type="primary" title="开发中" icon="el-icon-download">PPT</el-button>
+        <a :href="downloadMdUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">MD</el-button></a>
+        <a :href="downloadHtmlUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">HTML</el-button></a>
+        <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">DOCX</el-button></a>
+        <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a>
+        <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPTX</el-button></a>
       </div>
       <mavon-editor
         v-model="document.content"
         :toolbars-flag="false"
         :subfield="false"
         :navigation="true"
-        default-open="preview" />
+        default-open="preview"
+        font-size="14px" />
     </div>
   </section>
 </template>
@@ -26,7 +26,8 @@ import {
   downloadMd,
   downloadHtml,
   downloadPdf,
-  downloadDocx
+  downloadDocx,
+  downloadPptx
 } from '@/api/doc'
 
 export default {
@@ -62,6 +63,9 @@ export default {
     },
     downloadDocxUrl(id) {
       return downloadDocx(id)
+    },
+    downloadPptxUrl(id) {
+      return downloadPptx(id)
     }
   }
 }

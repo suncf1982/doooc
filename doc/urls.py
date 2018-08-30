@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^docs/download/html/(?P<pk>[0-9]+)/$', doc_view.download_html),
     url(r'^docs/download/pdf/(?P<pk>[0-9]+)/$', doc_view.download_pdf),
     url(r'^docs/download/docx/(?P<pk>[0-9]+)/$', doc_view.download_docx),
+    url(r'^docs/download/pptx/(?P<pk>[0-9]+)/$', doc_view.download_pptx),
     url(r'^docs/pupulartags/$', tag_view.popular_tags),
     url(r'^docs/pupularkeywords/$', keyword_view.popular_keywords),
 ]

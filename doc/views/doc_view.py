@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.db.models import Count
 from rest_framework import serializers
 from django.http import HttpResponse, StreamingHttpResponse
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 import os
 from datetime import datetime
 import time
@@ -80,6 +81,10 @@ class DocList(generics.ListCreateAPIView):
 
 
 class DocDetail(APIView):
+    # TODO: 主要是为了把get的权限放开，目前的做法put和delete的权限也放开了，需改进
+    authentication_classes = (())
+    permission_classes = (())
+
     def get_object(self, pk):
         try:
             return Doc.objects.get(pk=pk)
@@ -87,6 +92,7 @@ class DocDetail(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+
         obj = self.get_object(pk)
         serializer = DocReadonlySerializer(obj)
         return Response(serializer.data)
@@ -117,6 +123,8 @@ def publish(request, pk):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@authentication_classes(())
+@permission_classes(())
 def download_md(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
@@ -127,23 +135,28 @@ def download_md(request, pk):
     return response
 
 
+@authentication_classes(())
+@permission_classes(())
 def download_html(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
     output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.html'
     if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
         output = pypandoc.convert(obj.content, 'html', format='md', extra_args=[
-                                '--base-header-level=2'])
+            '--base-header-level=2'])
         with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'w', encoding='utf8') as f:
             f.write(output)
     with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'r', encoding='utf8') as f:
         c = f.read()
     response = HttpResponse(c)
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="%s"' % (output_file_name, )
+    response['Content-Disposition'] = 'attachment;filename="%s"' % (
+        output_file_name, )
     return response
 
 
+@authentication_classes(())
+@permission_classes(())
 def download_pdf(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
@@ -161,12 +174,32 @@ def download_pdf(request, pk):
     return response
 
 
+@authentication_classes(())
+@permission_classes(())
 def download_docx(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
     output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.docx'
     if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
         pypandoc.convert(obj.content, 'docx', format='md', outputfile=os.path.join(
+            FILE_CACHE_DIR, output_file_name))
+    with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'rb') as f:
+        c = f.read()
+    response = HttpResponse(c)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="%s"' % (
+        output_file_name,)
+    return response
+
+
+@authentication_classes(())
+@permission_classes(())
+def download_pptx(request, pk):
+    import pypandoc
+    obj = Doc.objects.get(pk=pk)
+    output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.pptx'
+    if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
+        pypandoc.convert(obj.content, 'pptx', format='md', outputfile=os.path.join(
             FILE_CACHE_DIR, output_file_name))
     with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'rb') as f:
         c = f.read()

@@ -60,12 +60,11 @@
         :fullscreen="true"
         title="">
         <div slot="title">
-          <a :href="downloadMdUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">MD</el-button></a>
-          <a :href="downloadHtmlUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">HTML</el-button></a>
-          <!-- <a :href="downloadPdfUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">PDF</el-button></a> -->
-          <a :href="downloadDocxUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download">DOCX</el-button></a>
-          <el-button :disabled="true" type="primary" title="开发中" icon="el-icon-download">PDF</el-button>
-          <el-button :disabled="true" type="primary" title="开发中" icon="el-icon-download">PPT</el-button>
+          <a :href="downloadMdUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download" size="small">MD</el-button></a>
+          <a :href="downloadHtmlUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download" size="small">HTML</el-button></a>
+          <a :href="downloadDocxUrl(viewedDoc.id)" download><el-button type="primary" icon="el-icon-download" size="small">DOCX</el-button></a>
+          <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a>
+          <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPTX</el-button></a>
         </div>
         <mavon-editor
           v-model="viewedDoc.content"
@@ -79,7 +78,7 @@
 </template>
 
 <script>
-import { getList, del, publish, downloadMd, downloadHtml, downloadPdf, downloadDocx } from '@/api/doc'
+import { getList, del, publish, downloadMd, downloadHtml, downloadPdf, downloadDocx, downloadPptx } from '@/api/doc'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -176,6 +175,9 @@ export default {
     },
     downloadDocxUrl(id) {
       return downloadDocx(id)
+    },
+    downloadPptxUrl(id) {
+      return downloadPptx(id)
     }
   }
 }
