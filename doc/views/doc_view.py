@@ -14,9 +14,12 @@ from django.db.models import Count
 from rest_framework import serializers
 from django.http import HttpResponse, StreamingHttpResponse
 import os
-import datetime
+from datetime import datetime
 import time
 from doooc import settings
+
+FILE_CACHE_DIR = os.path.join(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))), 'filecache')
 
 
 class DocList(generics.ListCreateAPIView):
@@ -72,7 +75,7 @@ class DocList(generics.ListCreateAPIView):
             queryset = queryset.filter(tech_stack=tech_stack)
         if tag != '':
             queryset = queryset.filter(tags__name__in=[tag])
-        
+
         return queryset
 
 
@@ -127,39 +130,48 @@ def download_md(request, pk):
 def download_html(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
-    output = pypandoc.convert(obj.content, 'html', format='md', extra_args=[
-                              '--base-header-level=2'])
-    response = HttpResponse(output)
+    output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.html'
+    if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
+        output = pypandoc.convert(obj.content, 'html', format='md', extra_args=[
+                                '--base-header-level=2'])
+        with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'w', encoding='utf8') as f:
+            f.write(output)
+    with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'r', encoding='utf8') as f:
+        c = f.read()
+    response = HttpResponse(c)
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="%s%s"' % (
-        time.strftime('%Y%m%d%H%M%S', time.localtime(time.time())), ".html")
+    response['Content-Disposition'] = 'attachment;filename="%s"' % (output_file_name, )
     return response
 
 
 def download_pdf(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
-    pypandoc.convert(obj.content, 'pdf', format='md', outputfile=os.path.join(
-        settings.BASE_DIR, 'temp/temp.pdf'), extra_args=['--pdf-engine=xelatex', '-V', 'geometry:margin=1.5cm', '-V','mainfont="SimSun"'])
-    with open(os.path.join(settings.BASE_DIR, 'temp/temp.pdf'), 'rb') as f:
+    output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.pdf'
+    if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
+        pypandoc.convert(obj.content, 'pdf', format='md', outputfile=os.path.join(
+            FILE_CACHE_DIR, output_file_name), extra_args=['--pdf-engine=xelatex', '-V', 'geometry:margin=1.5cm', '-V', 'mainfont="SimSun"'])
+    with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'rb') as f:
         c = f.read()
-        
+
     response = HttpResponse(c)
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="%s%s"' % (
-        time.strftime('%Y%m%d%H%M%S', time.localtime(time.time())), ".pdf")
+    response['Content-Disposition'] = 'attachment;filename="%s"' % (
+        output_file_name,)
     return response
 
 
 def download_docx(request, pk):
     import pypandoc
     obj = Doc.objects.get(pk=pk)
-    pypandoc.convert(obj.content, 'docx', format='md', outputfile=os.path.join(
-        settings.BASE_DIR, 'temp/temp.docx'))
-    with open(os.path.join(settings.BASE_DIR, 'temp/temp.docx'), 'rb') as f:
+    output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.docx'
+    if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
+        pypandoc.convert(obj.content, 'docx', format='md', outputfile=os.path.join(
+            FILE_CACHE_DIR, output_file_name))
+    with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'rb') as f:
         c = f.read()
     response = HttpResponse(c)
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="%s%s"' % (
-        time.strftime('%Y%m%d%H%M%S', time.localtime(time.time())), ".docx")
+    response['Content-Disposition'] = 'attachment;filename="%s"' % (
+        output_file_name,)
     return response

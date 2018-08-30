@@ -106,7 +106,7 @@ export default {
                 type: 'success'
               })
 
-              this.fetchData()
+              this.$router.push({ path: '/doc/create', query: { id: res.id }})
             })
           } else {
             update(param).then(res => {
