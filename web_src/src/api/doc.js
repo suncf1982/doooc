@@ -74,3 +74,7 @@ export function downloadPdf(id) {
 export function downloadDocx(id) {
   return process.env.BASE_API + '/docs/download/docx/' + id + '/'
 }
+
+export function uploadFile() {
+  return process.env.BASE_API + '/resources/upload/'
+}

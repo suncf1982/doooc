@@ -12,7 +12,11 @@
           :rules="[{ required: true, message: '内容不能为空'}]"
           label=""
           prop="content">
-          <mavon-editor v-model="addForm.content"/>
+          <mavon-editor
+            ref="md"
+            v-model="addForm.content"
+            font-size="14px"
+            @imgAdd="onImgAdd" />
         </el-form-item>
         <el-form-item label="">
           <el-select v-model="addForm.tech_stack" clearable size="small" placeholder="请选择技术栈">
@@ -37,8 +41,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapGetters } from 'vuex'
-import { get as getDocDetail, create, update } from '@/api/doc'
+import { get as getDocDetail, create, update, uploadFile } from '@/api/doc'
 const form = {
   title: '',
   author: '',
@@ -75,6 +80,19 @@ export default {
     fetchData() {
       getDocDetail(this.id).then(res => {
         this.addForm = { ...res }
+      })
+    },
+    onImgAdd(pos, file) {
+      const formdata = new FormData()
+      formdata.append('file', file)
+      axios({
+        url: uploadFile(),
+        method: 'post',
+        data: formdata,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }).then((res) => {
+        const file_url = process.env.BASE_API + res.data.url
+        this.$refs.md.$img2Url(pos, file_url)
       })
     },
     onAddTag() {

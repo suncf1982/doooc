@@ -137,6 +137,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 SUIT_CONFIG = {
     'ADMIN_NAME': '文档管理-DOOOC'
 }
