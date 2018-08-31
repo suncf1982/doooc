@@ -38,6 +38,14 @@ export function del(id) {
   })
 }
 
+export function search(params) {
+  return request({
+    url: '/docs/search/',
+    method: 'get',
+    params
+  })
+}
+
 export function publish(id) {
   return request({
     url: '/docs/publish/' + id + '/',

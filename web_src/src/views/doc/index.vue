@@ -54,7 +54,7 @@
             <el-tooltip class="item" effect="dark" content="修改" placement="top">
               <router-link :to="{ name: 'Doc-Create', query: { id: scope.row.id }}"><el-button type="text"><i class="el-icon-edit" /></el-button></router-link>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="发布" placement="top">
+            <el-tooltip v-if="!scope.row.published" class="item" effect="dark" content="发布" placement="top">
               <el-button type="text" style="color: #409EFF;" @click="handlePublish(scope.$index, scope.row)"><i class="el-icon-doooc-fabu" /></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="删除" placement="top">

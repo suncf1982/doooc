@@ -54,7 +54,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getList as search, pupularTags, pupularKeywords, pupularDocs } from '@/api/doc'
+import { search, pupularTags, pupularKeywords, pupularDocs } from '@/api/doc'
 
 export default {
   name: 'Dashboard',
