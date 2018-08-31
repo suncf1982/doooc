@@ -9,12 +9,12 @@
           </el-form-item>
           <el-form-item>
             <el-tooltip class="item" effect="dark" content="搜索" placement="top">
-              <el-button type="text" @click="fetchData"><i class="el-icon-search" /></el-button>
+              <el-button size="mini" circle @click="fetchData"><i class="el-icon-search" /></el-button>
             </el-tooltip>
           </el-form-item>
           <el-form-item>
             <el-tooltip class="item" effect="dark" content="添加文档" placement="top">
-              <router-link :to="{ name: 'Doc-Create'}"><el-button type="text"><i class="el-icon-plus" /></el-button></router-link>
+              <router-link :to="{ name: 'Doc-Create'}"><el-button type="primary" size="mini" circle><i class="el-icon-plus" /></el-button></router-link>
             </el-tooltip>
           </el-form-item>
         </el-form>

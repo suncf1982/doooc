@@ -4,9 +4,9 @@
       <el-form ref="form" :model="addForm" label-position="top" label-width="80px" @keyup.ctrl.83.native.stop.prevent="onSubmit('form')">
         <el-form-item
           :rules="[{ required: true, message: '标题不能为空'}]"
-          label="文档标题"
+          label=""
           prop="title">
-          <el-input v-model="addForm.title" />
+          <el-input v-model="addForm.title" placeholder="标题" />
         </el-form-item>
         <el-form-item
           :rules="[{ required: true, message: '内容不能为空'}]"
@@ -33,7 +33,7 @@
           <el-button v-show="addingTag" type="danger" icon="el-icon-close" size="mini" title="取消" circle @click.native="onCancelAddTag()" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click.native="onSubmit('form')">保存</el-button>
+          <el-button type="primary" icon="el-icon-doooc-baocun" size="small" @click.native="onSubmit('form')">保存</el-button>
         </el-form-item>
       </el-form>
     </div>
