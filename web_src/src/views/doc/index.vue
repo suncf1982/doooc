@@ -5,21 +5,25 @@
       <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
         <el-form :inline="true" :model="filters">
           <el-form-item>
-            <el-input v-model="filters.search_word" placeholder="关键字" />
+            <el-input v-model="filters.search_word" size="small" placeholder="关键字" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="fetchData">查询</el-button>
+            <el-tooltip class="item" effect="dark" content="搜索" placement="top">
+              <el-button type="text" @click="fetchData"><i class="el-icon-search" /></el-button>
+            </el-tooltip>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="handleAdd">新增</el-button>
+            <el-tooltip class="item" effect="dark" content="添加文档" placement="top">
+              <router-link :to="{ name: 'Doc-Create'}"><el-button type="text"><i class="el-icon-plus" /></el-button></router-link>
+            </el-tooltip>
           </el-form-item>
         </el-form>
       </el-col>
 
-      <el-table v-loading.body="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
+      <el-table v-loading.body="listLoading" :data="list" element-loading-text="拼命加载中" fit>
         <el-table-column label="标题" header-align="center">
           <template slot-scope="scope">
-            {{ scope.row.title }}
+            <router-link :to="{ name: 'Doc-View', params: { id: scope.row.id } }" target="_blank" style="text-decoration: underline;">{{ scope.row.title }}</router-link>
           </template>
         </el-table-column>
         <el-table-column label="作者" header-align="center" align="center" width="100">
@@ -29,30 +33,41 @@
         </el-table-column>
         <el-table-column label="发布状态" header-align="center" align="center" width="100">
           <template slot-scope="scope">
-            <el-tag :type="scope.row.published | publishedFilter">{{ scope.row.published | publishedNameFilter }}</el-tag>
+            <el-tag :type="scope.row.published | publishedFilter" size="small">{{ scope.row.published | publishedNameFilter }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="创建日期" header-align="center" align="center" width="180">
+        <el-table-column label="创建于" header-align="center" align="center" width="100">
           <template slot-scope="scope">
-            {{ scope.row.create_at }}
+            {{ scope.row.create_at | formatDate }}
           </template>
         </el-table-column>
-        <el-table-column label="更新日期" header-align="center" align="center" width="180">
+        <el-table-column label="更新于" header-align="center" align="center" width="100">
           <template slot-scope="scope">
-            {{ scope.row.update_at }}
+            {{ scope.row.update_at | formatDate }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" header-align="center" align="center" width="225" class-name="op">
+        <el-table-column label="操作" header-align="center" align="center" width="160" class-name="op">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleView(scope.$index, scope.row)"><i class="el-icon-view" /></el-button>
-            <!-- <router-link :to="'/doc/view/'+scope.row.id"><i class="el-icon-view"></i></router-link> -->
-            <!-- <el-button type="text" @click="handleEdit(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button> -->
-            <router-link :to="{ name: 'Doc-Create', query: { id: scope.row.id }}"><el-button type="text"><i class="el-icon-edit" /></el-button></router-link>
-            <el-button type="text" style="color: #F56C6C;" @click="handleDel(scope.$index, scope.row)"><i class="el-icon-delete" /></el-button>
-            <el-button v-show="!scope.row.published" type="success" size="small" @click="handlePublish(scope.$index, scope.row)">发布</el-button>
+            <el-tooltip class="item" effect="dark" content="预览" placement="top">
+              <router-link :to="{ name: 'Doc-View', params: { id: scope.row.id } }" target="_blank" style="color: #409EFF;"><i class="el-icon-view" /></router-link>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="修改" placement="top">
+              <router-link :to="{ name: 'Doc-Create', query: { id: scope.row.id }}"><el-button type="text"><i class="el-icon-edit" /></el-button></router-link>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="发布" placement="top">
+              <el-button type="text" style="color: #409EFF;" @click="handlePublish(scope.$index, scope.row)"><i class="el-icon-doooc-fabu" /></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="删除" placement="top">
+              <el-button type="text" style="color: #F56C6C;" @click="handleDel(scope.$index, scope.row)"><i class="el-icon-delete" /></el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
+
+      <!--工具条-->
+      <el-col :span="24" class="toolbar">
+        <el-pagination :page-size="pageSize" :total="total" layout="total, prev, pager, next, jumper" style="float:right;" @current-change="handleCurrentChange" />
+      </el-col>
 
       <el-dialog
         :show-close="false"
@@ -80,14 +95,20 @@
 <script>
 import { getList, del, publish, downloadMd, downloadHtml, downloadPdf, downloadDocx, downloadPptx } from '@/api/doc'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
+
+moment.locale('zh-cn')
 
 export default {
   filters: {
     publishedFilter(published) {
-      return published ? 'success' : 'gray'
+      return published ? 'success' : 'info'
     },
     publishedNameFilter(published) {
       return published ? '已发布' : '未发布'
+    },
+    formatDate(dateStr) {
+      return moment(dateStr).fromNow()
     }
   },
   data() {
@@ -190,5 +211,9 @@ export default {
 
   .page-doc-index .op .el-button {
     margin-left: 10px;
+  }
+
+  .page-doc-index .el-table td, .page-doc-index .el-table th {
+    padding: 3px 0;
   }
 </style>
