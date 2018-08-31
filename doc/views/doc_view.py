@@ -30,7 +30,7 @@ class DocList(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = DocSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author=request.user)
+            serializer.save(author=request.user, update_at=datetime.now())
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -101,7 +101,7 @@ class DocDetail(APIView):
         obj = self.get_object(pk)
         serializer = DocSerializer(obj, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(update_at=datetime.now())
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

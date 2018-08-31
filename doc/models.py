@@ -1,6 +1,8 @@
 from django.db import models
+from django.utils import timezone
 from taggit.managers import TaggableManager
 from .enums import TECH_STACK
+from datetime import datetime
 
 # Create your models here.
 
@@ -23,7 +25,7 @@ class Doc(models.Model):
     download_times = models.IntegerField('下载次数', default=0)
     published = models.BooleanField('发布', default=False, editable=True)
     create_at = models.DateTimeField('创建日期', editable=False, auto_now_add=True)
-    update_at = models.DateTimeField('更新日期', editable=False, auto_now=True)
+    update_at = models.DateTimeField('更新日期', editable=True, default=timezone.now)
 
     def __str__(self):
         return self.title
