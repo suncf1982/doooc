@@ -43,7 +43,7 @@
         title="选择文档模块"
         width="80%">
         <el-row>
-          <el-col :span="6" v-for="(template, index) in templates" :key="template.id" :offset="index > 0 ? 2 : 0">
+          <el-col v-for="(template, index) in templates" :key="template.id" :span="6" :offset="index > 0 ? 2 : 0">
             <el-card :body-style="{ padding: '0px' }" shadow="hover">
               <img :src="template.preview_image" class="image">
               <div style="padding: 14px;">
@@ -177,18 +177,17 @@ export default {
       })
     },
     onSelectDocTemplates() {
-      getTemplates().then(res=>{
+      getTemplates().then(res => {
         this.templates = res.results
         this.selTplDialogVisible = true
       })
     },
     onTemplateSelected(id) {
-      getTemplateContent(id).then(res=>{
+      getTemplateContent(id).then(res => {
         this.addForm.content = res.content
         this.addForm.title = res.template.name
         this.selTplDialogVisible = false
       })
-      
     }
   }
 }
@@ -204,22 +203,18 @@ export default {
     padding: 0;
     float: right;
   }
-  
   .bottom {
     margin-top: 13px;
     line-height: 12px;
   }
-
   .clearfix:before,
   .clearfix:after {
       display: table;
       content: "";
   }
-  
   .clearfix:after {
       clear: both
   }
-
   .time {
     font-size: 13px;
     color: #999;
