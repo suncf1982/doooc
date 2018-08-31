@@ -1,0 +1,23 @@
+
+- model: auth.User
+  pk: 1
+  fields:
+    username: admin
+    first_name: 管理员
+    email: example@example.com
+    is_staff: True
+    is_active: True
+    is_superuser: True
+    password: pbkdf2_sha256$36000$vLYYcJIZdTJy$CjhqAUG+7avaQtdzFA1CDFTQC7cSq242Elr95RWiNmc=
+    groups: [1]
+
+- model: auth.User
+  pk: 2
+  fields:
+    username: suncf
+    first_name: 孙长富
+    email: 905517073@qq.com
+    password: pbkdf2_sha256$36000$vLYYcJIZdTJy$CjhqAUG+7avaQtdzFA1CDFTQC7cSq242Elr95RWiNmc=
+    groups: [2]
+
+    
