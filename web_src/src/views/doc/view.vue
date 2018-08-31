@@ -74,6 +74,12 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .view-doc {
   margin: 0;
+  .markdown-body {
+    font-size: 14px;
+  }
+  .v-note-wrapper .v-note-panel .v-note-navigation-wrapper .v-note-navigation-title {
+    font-size: 16px;
+  }
   .v-note-show {
     padding-left: 250px !important;
   }
