@@ -20,7 +20,22 @@
           </el-tag>
         </dd>
         <dd class="result-item-link">
-          <router-link :to="{ name: 'Doc-View', params: { id: item.id } }" target="_blank">{{ displayViewUrl(item.id) }}</router-link>
+          <router-link :to="{ name: 'Doc-View', params: { id: item.id } }" target="_blank" style="margin-right: 10px;">{{ displayViewUrl(item.id) }}</router-link>
+          <el-tooltip class="item" effect="dark" content="下载MARKDOWN文件" placement="top">
+            <a :href="downloadMdUrl(item.id)" download><el-button type="text" icon="el-icon-doooc-markdown" size="medium" /></a>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="下载HTML文件" placement="top">
+            <a :href="downloadHtmlUrl(item.id)" download><el-button type="text" icon="el-icon-doooc-html" size="medium" /></a>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="下载WORD文件" placement="top">
+            <a :href="downloadDocxUrl(item.id)" download><el-button type="text" icon="el-icon-doooc-word" size="medium" /></a>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="下载PDF文件" placement="top">
+            <a :href="downloadPdfUrl(item.id)" download><el-button type="text" icon="el-icon-doooc-pdf" size="medium" /></a>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="下载PPT文件" placement="top">
+            <a :href="downloadPptxUrl(item.id)" download><el-button type="text" icon="el-icon-doooc-ppt" size="medium" /></a>
+          </el-tooltip>
         </dd>
       </dl>
       <div v-if="isSearching && total===0" class="sorry">很抱歉，没有找到与<span style="color: red; margin: 0 5px;">{{ searchedText }}</span>相关的文档。</div>
@@ -54,7 +69,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { search, pupularTags, pupularKeywords, pupularDocs } from '@/api/doc'
+import {
+  search,
+  pupularTags,
+  pupularKeywords,
+  pupularDocs,
+  downloadMd,
+  downloadHtml,
+  downloadPdf,
+  downloadDocx,
+  downloadPptx
+} from '@/api/doc'
 
 export default {
   name: 'Dashboard',
@@ -137,6 +162,21 @@ export default {
       }
       Object.assign(params, kvpairs)
       return params
+    },
+    downloadMdUrl(id) {
+      return downloadMd(id)
+    },
+    downloadHtmlUrl(id) {
+      return downloadHtml(id)
+    },
+    downloadPdfUrl(id) {
+      return downloadPdf(id)
+    },
+    downloadDocxUrl(id) {
+      return downloadDocx(id)
+    },
+    downloadPptxUrl(id) {
+      return downloadPptx(id)
     }
   }
 }
@@ -198,6 +238,9 @@ export default {
         &-link {
           color: green;
           font-size: 13px;
+          a {
+            margin-right: 3px;
+          }
         }
       }
 
