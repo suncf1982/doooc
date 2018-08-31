@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import dependence_view, doc_view, tag_view, keyword_view
+from .views import dependence_view, doc_view, tag_view, keyword_view, doctemplate_view
 
 urlpatterns = [
     url(r'^dependences/$', dependence_view.dependences),
@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^docs/populardocs/$', doc_view.popular_docs),
     url(r'^docs/pupulartags/$', tag_view.popular_tags),
     url(r'^docs/pupularkeywords/$', keyword_view.popular_keywords),
+    url(r'^docs/templates/$', doctemplate_view.DocTemplateList.as_view()),
+    url(r'^docs/templates/(?P<pk>[0-9]+)/$', doctemplate_view.get_template),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

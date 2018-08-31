@@ -12,6 +12,7 @@
           :rules="[{ required: true, message: '内容不能为空'}]"
           label=""
           prop="content">
+          <el-button type="warning" icon="el-icon-search" size="mini" style="margin-bottom: 10px;" @click="onSelectDocTemplates">选择模板快速开始</el-button>
           <mavon-editor
             ref="md"
             v-model="addForm.content"
@@ -36,6 +37,26 @@
           <el-button type="primary" icon="el-icon-doooc-baocun" size="small" @click.native="onSubmit('form')">保存</el-button>
         </el-form-item>
       </el-form>
+      <el-dialog
+        :visible.sync="selTplDialogVisible"
+        top="5vh"
+        title="选择文档模块"
+        width="80%">
+        <el-row>
+          <el-col :span="6" v-for="(template, index) in templates" :key="template.id" :offset="index > 0 ? 2 : 0">
+            <el-card :body-style="{ padding: '0px' }" shadow="hover">
+              <img :src="template.preview_image" class="image">
+              <div style="padding: 14px;">
+                <span>{{ template.name }}</span>
+                <div class="bottom clearfix">
+                  <time class="time">{{ template.update_at | formatDate }}</time>
+                  <el-button type="text" class="button" icon="el-icon-check" @click="onTemplateSelected(template.id)">选择</el-button>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-dialog>
     </div>
   </section>
 </template>
@@ -43,7 +64,10 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
-import { get as getDocDetail, create, update, uploadFile } from '@/api/doc'
+import { get as getDocDetail, create, update, uploadFile, getTemplates, getTemplateContent } from '@/api/doc'
+import moment from 'moment'
+
+moment.locale('zh-cn')
 const form = {
   title: '',
   author: '',
@@ -53,12 +77,19 @@ const form = {
 }
 export default {
   name: 'CreateDoc',
+  filters: {
+    formatDate(dateStr) {
+      return moment(dateStr).fromNow()
+    }
+  },
   data() {
     return {
       addForm: { ...form },
       addLoading: false,
       addingTag: false,
-      newTag: ''
+      newTag: '',
+      selTplDialogVisible: false,
+      templates: []
     }
   },
   computed: {
@@ -144,10 +175,53 @@ export default {
           return false
         }
       })
+    },
+    onSelectDocTemplates() {
+      getTemplates().then(res=>{
+        this.templates = res.results
+        this.selTplDialogVisible = true
+      })
+    },
+    onTemplateSelected(id) {
+      getTemplateContent(id).then(res=>{
+        this.addForm.content = res.content
+        this.addForm.title = res.template.name
+        this.selTplDialogVisible = false
+      })
+      
     }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  .image {
+    width: 100%;
+    height: 240px;
+    display: block;
+  }
+  .button {
+    padding: 0;
+    float: right;
+  }
+  
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+  
+  .clearfix:after {
+      clear: both
+  }
+
+  .time {
+    font-size: 13px;
+    color: #999;
+  }
 </style>

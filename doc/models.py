@@ -53,3 +53,17 @@ class PopularKeyword(models.Model):
     objects = PopularKeywordManager()
     def __str__(self):
         return self.keyword
+
+class DocTemplate(models.Model):
+    class Meta:
+        verbose_name = '文档模板'
+        verbose_name_plural = '文档模板'
+    name = models.CharField('模板名称', max_length=200, unique=True)
+    storage = models.FileField('存放位置', upload_to='templates/%Y/%m/%d/')
+    preview_image = models.ImageField('预览图', upload_to='uploads/%Y/%m/%d/')
+    usage_times = models.IntegerField('应用次数', default=0)
+    create_at = models.DateTimeField('创建日期', editable=False, auto_now_add=True)
+    update_at = models.DateTimeField('更新日期', editable=False, auto_now=True)
+
+    def __str__(self):
+        return self.name

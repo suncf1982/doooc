@@ -1,4 +1,4 @@
-from .models import Doc, PopularKeyword
+from .models import Doc, PopularKeyword, DocTemplate
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
 from taggit_serializer.serializers import (TagListSerializerField, TaggitSerializer)
@@ -33,4 +33,11 @@ class PopularKeywordSerializer(serializers.ModelSerializer):
     update_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', allow_null=True, required=False)
     class Meta:
         model = PopularKeyword
+        fields = '__all__'
+
+class DocTemplateSerializer(serializers.ModelSerializer):
+    create_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', allow_null=True, required=False)
+    update_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', allow_null=True, required=False)
+    class Meta:
+        model = DocTemplate
         fields = '__all__'

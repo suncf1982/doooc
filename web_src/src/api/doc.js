@@ -89,3 +89,18 @@ export function downloadPptx(id) {
 export function uploadFile() {
   return process.env.BASE_API + '/resources/upload/'
 }
+
+export function getTemplates(params) {
+  return request({
+    url: '/docs/templates/',
+    method: 'get',
+    params
+  })
+}
+
+export function getTemplateContent(id) {
+  return request({
+    url: '/docs/templates/' + id + '/',
+    method: 'get'
+  })
+}
