@@ -2,20 +2,21 @@
   <el-menu class="navbar" mode="horizontal">
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
     <breadcrumb />
-    <el-dropdown class="avatar-container" trigger="click">
+    <el-dropdown class="avatar-container" trigger="hover" placement="top">
       <div class="avatar-wrapper">
-        <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
         {{ name }}<i class="el-icon-caret-bottom"/>
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
-        <router-link class="inlineBlock" to="/">
-          <el-dropdown-item>
-            主页
-          </el-dropdown-item>
-        </router-link>
-        <el-dropdown-item divided>
-          <span style="display:block;" @click="logout">退出</span>
-        </el-dropdown-item>
+        <div class="user-panel">
+          <div class="user-panel-header">
+            <img src="@/assets/images/avatar5.png" class="user-avatar">
+            <div class="user-info">{{ name }}</div>
+          </div>
+          <div class="user-panel-footer">
+            <el-button size="medium">个人信息</el-button>
+            <el-button size="medium" style="float: right;" @click="logout">退出系统</el-button>
+          </div>
+        </div>
       </el-dropdown-menu>
     </el-dropdown>
   </el-menu>
@@ -89,6 +90,31 @@ export default {
         font-size: 12px;
       }
     }
+  }
+}
+
+.user-panel {
+  width: 280px;
+  &-header {
+    height: 160px;
+    background: #3c8dbc;
+    padding: 10px;
+    text-align: center;
+    .user-avatar {
+      z-index: 5;
+      height: 90px;
+      width: 90px;
+      border: 3px solid;
+      border-radius: 50%;
+      border-color: white;
+    }
+    .user-info {
+      color: white;
+      padding: 10px;
+    }
+  }
+  &-footer {
+    padding: 10px;
   }
 }
 </style>

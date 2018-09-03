@@ -37,15 +37,6 @@ export const constantRouterMap = [
     }]
   },
   {
-    path: '/view/:id',
-    name: 'Doc-View',
-    component: () => import('@/views/doc/view'),
-    hidden: true
-  }
-]
-
-export const asyncRouterMap = [
-  {
     path: '/doc',
     component: Layout,
     redirect: '/doc/index',
@@ -66,6 +57,29 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/profile',
+    component: Layout,
+    name: 'Profile',
+    meta: { title: '个人信息', icon: 'markdown' },
+    children: [
+      {
+        path: 'index',
+        name: 'Profile-Index',
+        component: () => import('@/views/profile/index'),
+        meta: { title: '个人信息', icon: 'markdown' }
+      }
+    ]
+  },
+  {
+    path: '/view/:id',
+    name: 'Doc-View',
+    component: () => import('@/views/doc/view'),
+    hidden: true
+  }
+]
+
+export const asyncRouterMap = [
   {
     path: '/example',
     component: Layout,

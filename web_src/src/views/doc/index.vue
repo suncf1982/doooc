@@ -23,7 +23,8 @@
       <el-table v-loading.body="listLoading" :data="list" element-loading-text="拼命加载中" fit>
         <el-table-column label="标题" header-align="center">
           <template slot-scope="scope">
-            <router-link :to="{ name: 'Doc-View', params: { id: scope.row.id } }" target="_blank" style="text-decoration: underline;">{{ scope.row.title }}</router-link>
+            <router-link :to="{ name: 'Doc-View', params: { id: scope.row.id } }" target="_blank" class="title" style="text-decoration: underline;">{{ scope.row.title }}</router-link>
+            <router-link :to="{ name: 'Doc-Create', query: { id: scope.row.id }}" class="quick-edit"><el-button type="text"><i class="el-icon-edit" /></el-button></router-link>
           </template>
         </el-table-column>
         <el-table-column label="作者" header-align="center" align="center" width="100">
@@ -120,7 +121,7 @@ export default {
       listLoading: true,
       total: 0,
       page: 1,
-      pageSize: 10,
+      pageSize: 20,
       viewDocDialogVisible: false,
       viewedDoc: {
         content: ''
@@ -215,5 +216,15 @@ export default {
 
   .page-doc-index .el-table td, .page-doc-index .el-table th {
     padding: 3px 0;
+  }
+
+  .page-doc-index .el-table__row a.quick-edit {
+     display: none;
+  }
+
+  .page-doc-index .el-table__row {
+    &:hover a.quick-edit {
+      display: inline;
+    }
   }
 </style>

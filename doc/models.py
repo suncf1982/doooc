@@ -9,6 +9,7 @@ from datetime import datetime
 
 class Doc(models.Model):
     class Meta:
+        ordering = ["-update_at"]
         verbose_name = '文档'
         verbose_name_plural = '文档'
     title = models.CharField('标题', max_length=200)
