@@ -60,6 +60,7 @@ export const constantRouterMap = [
   {
     path: '/profile',
     component: Layout,
+    redirect: '/profile/index',
     name: 'Profile',
     meta: { title: '个人信息', icon: 'markdown' },
     children: [

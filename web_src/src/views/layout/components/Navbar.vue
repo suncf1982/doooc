@@ -13,7 +13,7 @@
             <div class="user-info">{{ name }}</div>
           </div>
           <div class="user-panel-footer">
-            <el-button size="medium">个人信息</el-button>
+            <router-link :to="{ name: 'Profile-Index'}"><el-button>个人信息</el-button></router-link>
             <el-button size="medium" style="float: right;" @click="logout">退出系统</el-button>
           </div>
         </div>
