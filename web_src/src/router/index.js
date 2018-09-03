@@ -62,13 +62,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/profile/index',
     name: 'Profile',
-    meta: { title: '个人信息', icon: 'markdown' },
+    meta: { title: '个人信息', icon: 'user' },
     children: [
       {
         path: 'index',
         name: 'Profile-Index',
         component: () => import('@/views/profile/index'),
-        meta: { title: '个人信息', icon: 'markdown' }
+        meta: { title: '个人信息', icon: 'user' }
       }
     ]
   },
