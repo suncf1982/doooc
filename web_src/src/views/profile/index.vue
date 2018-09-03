@@ -35,7 +35,22 @@
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="我的收藏" name="myfavorites">我的收藏</el-tab-pane>
-            <el-tab-pane label="设置" name="setting">基础信息设置</el-tab-pane>
+            <el-tab-pane label="修改密码" name="setting">
+              <el-form ref="ruleChgPassForm" :model="ruleChgPassForm" :rules="rulesChgPass" status-icon label-width="100px" class="demo-ruleForm">
+                <el-form-item label="原密码" prop="originalPass">
+                  <el-input v-model="ruleChgPassForm.originalPass" type="password" auto-complete="off" />
+                </el-form-item>
+                <el-form-item label="密码" prop="pass">
+                  <el-input v-model="ruleChgPassForm.pass" type="password" auto-complete="off" />
+                </el-form-item>
+                <el-form-item label="确认密码" prop="checkPass">
+                  <el-input v-model="ruleChgPassForm.checkPass" type="password" auto-complete="off" />
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="onSubmitChgPassForm('ruleChgPassForm')">保存</el-button>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
           </el-tabs>
         </el-main>
       </el-container>
@@ -58,11 +73,53 @@ export default {
     }
   },
   data() {
+    const validateOriginalPass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入原密码'))
+      } else {
+        callback()
+      }
+    }
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.ruleChgPassForm.checkPass !== '') {
+          this.$refs.ruleChgPassForm.validateField('checkPass')
+        }
+        callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.ruleChgPassForm.pass) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       user: {},
       activeName: 'mydocs',
       myDocsLoading: false,
-      mydocs: []
+      mydocs: [],
+      ruleChgPassForm: {
+        originalPass: '',
+        pass: '',
+        checkPass: ''
+      },
+      rulesChgPass: {
+        originalPass: [
+          { validator: validateOriginalPass, trigger: 'blur' }
+        ],
+        pass: [
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        checkPass: [
+          { validator: validatePass2, trigger: 'blur' }
+        ]
+      }
     }
   },
   computed: {
@@ -95,6 +152,15 @@ export default {
       if (tab.name === 'mydocs') {
         this.getMyDocs()
       }
+    },
+    onSubmitChgPassForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('submit!')
+        } else {
+          return false
+        }
+      })
     }
   }
 }
