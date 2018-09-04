@@ -7,6 +7,9 @@
         <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">DOCX</el-button></a>
         <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a>
         <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPTX</el-button></a>
+        <el-tooltip class="item" effect="dark" content="分享" placement="top">
+          <el-button type="text" style="color: #F56C6C; float: right;" @click="shareDialogVisible = true"><i class="el-icon-doooc-fenxiang" /></el-button>
+        </el-tooltip>
       </div>
       <mavon-editor
         v-model="document.content"
@@ -15,6 +18,18 @@
         :navigation="true"
         default-open="preview"
         font-size="14px" />
+
+      <el-dialog :visible.sync="shareDialogVisible" title="分享文档">
+        <el-form>
+          <el-form-item label="邮箱地址" label-width="100px">
+            <el-input v-model="share_to" auto-complete="off" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="shareDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="share()">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </section>
 </template>
@@ -27,7 +42,8 @@ import {
   downloadHtml,
   downloadPdf,
   downloadDocx,
-  downloadPptx
+  downloadPptx,
+  share
 } from '@/api/doc'
 
 export default {
@@ -36,7 +52,9 @@ export default {
     return {
       document: {
         content: ''
-      }
+      },
+      shareDialogVisible: false,
+      share_to: ''
     }
   },
   computed: {
@@ -66,6 +84,11 @@ export default {
     },
     downloadPptxUrl(id) {
       return downloadPptx(id)
+    },
+    share() {
+      share(this.document.id, this.share_to).then(res => {
+        this.shareDialogVisible = false
+      })
     }
   }
 }

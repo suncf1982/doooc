@@ -14,6 +14,7 @@ from django.db.models import Count
 from rest_framework import serializers
 from django.http import HttpResponse, StreamingHttpResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from django.core.mail import send_mail
 import os
 from datetime import datetime
 import time
@@ -268,3 +269,22 @@ def popular_docs(request):
     queryset = Doc.objects.values('id', 'title').order_by('-download_times')[:5]
     serializer = UserKVSerializer(queryset, many=True)
     return Response(serializer.data)
+
+@api_view(['put'])
+@authentication_classes(())
+@permission_classes(())
+def share(request, pk):
+    share_to = request.data['share_to']
+    try:
+        obj = Doc.objects.get(pk=pk)
+        send_mail(
+            '来自于xxx平台的共享文档',
+            obj.title,
+            settings.EMAIL_HOST_USER,
+            [share_to],
+            fail_silently=False,
+        )
+    except Doc.DoesNotExist:
+        raise Http404
+
+    return Response(status=status.HTTP_204_NO_CONTENT)

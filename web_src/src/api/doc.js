@@ -53,6 +53,16 @@ export function publish(id) {
   })
 }
 
+export function share(id, share_to) {
+  return request({
+    url: '/docs/share/' + id + '/',
+    method: 'put',
+    data: {
+      share_to: share_to
+    }
+  })
+}
+
 export function pupularTags() {
   return request({
     url: '/docs/pupulartags/',

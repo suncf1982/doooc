@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^docs/(?P<pk>[0-9]+)/$', doc_view.DocDetail.as_view()),
     url(r'^docs/search/$', doc_view.SearchList.as_view()),
     url(r'^docs/publish/(?P<pk>[0-9]+)/$', doc_view.publish),
+    url(r'^docs/share/(?P<pk>[0-9]+)/$', doc_view.share),
     url(r'^docs/download/md/(?P<pk>[0-9]+)/$', doc_view.download_md),
     url(r'^docs/download/html/(?P<pk>[0-9]+)/$', doc_view.download_html),
     url(r'^docs/download/pdf/(?P<pk>[0-9]+)/$', doc_view.download_pdf),

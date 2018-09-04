@@ -168,3 +168,8 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'core.views.authtoken_view.jwt_response_payload_handler',
 }
+
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_HOST_USER = '1511908497@qq.com'
+EMAIL_HOST_PASSWORD = '1qaz2wsx'
+# EMAIL_USE_SSL = True
