@@ -70,3 +70,26 @@ class DocTemplate(models.Model):
 
     def __str__(self):
         return self.name
+
+class Favorite(models.Model):
+    class Meta:
+        verbose_name = '个人收藏'
+        verbose_name_plural = '个人收藏'
+        unique_together = ("doc", "user")
+        ordering = ["-create_at"]
+    doc = models.ForeignKey(
+        Doc,
+        on_delete=models.CASCADE,
+        verbose_name="文档",
+        related_name='favorite_docs',
+    )
+    user = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE,
+        verbose_name="收藏人",
+        related_name='favorite_users'
+    )
+    create_at = models.DateTimeField('收藏日期', editable=False, auto_now_add=True)
+
+    def __str__(self):
+        return self.doc.title + '--' + self.doc.author.first_name

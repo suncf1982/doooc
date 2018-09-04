@@ -34,8 +34,22 @@
                 </el-table-column>
               </el-table>
             </el-tab-pane>
-            <el-tab-pane label="我的收藏" name="myfavorites">我的收藏</el-tab-pane>
-            <el-tab-pane label="修改密码" name="setting">
+            <el-tab-pane label="我的收藏" name="myfavorites" class="page-profile-tab-favorite">
+              <el-table v-loading.body="myFavoritesLoading" :data="myFavorites" :show-header="false" element-loading-text="拼命加载中" fit>
+                <el-table-column label="标题" header-align="center">
+                  <template slot-scope="scope">
+                    <router-link :to="{ name: 'Doc-View', params: { id: scope.row.doc.id } }" target="_blank" class="title" style="text-decoration: underline;">{{ scope.row.doc.title }}</router-link>
+                    <el-button type="text" class="quick-cancel" style="color: #F56C6C;" @click="onCancelFavorite(scope.$index, scope.row)"><i class="el-icon-delete" /></el-button>
+                  </template>
+                </el-table-column>
+                <el-table-column label="收藏于" header-align="center" align="center" width="100">
+                  <template slot-scope="scope">
+                    {{ scope.row.create_at | formatDate }}
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="修改密码" name="setting" class="page-profile-tab-setting">
               <el-form ref="ruleChgPassForm" :model="ruleChgPassForm" :rules="rulesChgPass" status-icon label-width="100px" class="demo-ruleForm">
                 <el-form-item label="原密码" prop="originalPass">
                   <el-input v-model="ruleChgPassForm.originalPass" type="password" auto-complete="off" />
@@ -62,7 +76,7 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import { getInfo } from '@/api/login'
-import { getList as getDocList } from '@/api/doc'
+import { getList as getDocList, getFavorites, delFavorite as cancelFavorite } from '@/api/doc'
 
 moment.locale('zh-cn')
 
@@ -104,6 +118,8 @@ export default {
       activeName: 'mydocs',
       myDocsLoading: false,
       mydocs: [],
+      myFavoritesLoading: false,
+      myFavorites: [],
       ruleChgPassForm: {
         originalPass: '',
         pass: '',
@@ -137,6 +153,7 @@ export default {
     fetchData() {
       this.getUserInfo()
       this.getMyDocs()
+      this.getMyFavorites()
     },
     getUserInfo() {
       getInfo(this.token).then(response => {
@@ -148,9 +165,25 @@ export default {
         this.mydocs = response.results
       })
     },
+    getMyFavorites() {
+      getFavorites({ limit: 10 }).then(response => {
+        this.myFavorites = response.results
+      })
+    },
+    onCancelFavorite(index, row) {
+      cancelFavorite(row.id).then(res => {
+        this.$message({
+          message: '已取消收藏',
+          type: 'success'
+        })
+        this.getMyFavorites()
+      })
+    },
     onTabClick(tab, event) {
       if (tab.name === 'mydocs') {
         this.getMyDocs()
+      } else if (tab.name === 'myfavorites') {
+        this.getMyFavorites()
       }
     },
     onSubmitChgPassForm(formName) {
@@ -204,6 +237,24 @@ export default {
         span {
           float: right;
         }
+      }
+    }
+  }
+
+  .page-profile {
+    &-tab-favorite .el-table__row button.quick-cancel {
+      display: none;
+    }
+    &-tab-favorite .el-table__row {
+      &:hover button.quick-cancel {
+        padding-top: 0;
+        padding-bottom: 0;
+        display: inline;
+      }
+    }
+    &-tab-setting {
+      .el-form {
+        width: 460px;
       }
     }
   }

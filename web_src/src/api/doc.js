@@ -112,3 +112,26 @@ export function getTemplateContent(id) {
     method: 'get'
   })
 }
+
+export function getFavorites(params) {
+  return request({
+    url: '/docs/favorites/',
+    method: 'get',
+    params
+  })
+}
+
+export function createFavorite(data) {
+  return request({
+    url: '/docs/favorites/',
+    method: 'post',
+    data
+  })
+}
+
+export function delFavorite(id) {
+  return request({
+    url: '/docs/favorites/' + id + '/',
+    method: 'delete'
+  })
+}

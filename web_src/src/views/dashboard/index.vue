@@ -21,6 +21,9 @@
         </dd>
         <dd class="result-item-link">
           <router-link :to="{ name: 'Doc-View', params: { id: item.id } }" target="_blank" style="margin-right: 10px;">{{ displayViewUrl(item.id) }}</router-link>
+          <el-tooltip class="item" effect="dark" content="收藏" placement="top">
+            <el-button type="text" class="result-item-link-favorite" @click="favorite(item.id)"><i class="el-icon-doooc-shoucang" /></el-button>
+          </el-tooltip>
           <el-tooltip class="item" effect="dark" content="下载MARKDOWN文件" placement="top">
             <a :href="downloadMdUrl(item.id)" download><el-button type="text" icon="el-icon-doooc-markdown" size="medium" /></a>
           </el-tooltip>
@@ -78,7 +81,8 @@ import {
   downloadHtml,
   downloadPdf,
   downloadDocx,
-  downloadPptx
+  downloadPptx,
+  createFavorite
 } from '@/api/doc'
 
 export default {
@@ -163,6 +167,14 @@ export default {
       Object.assign(params, kvpairs)
       return params
     },
+    favorite(id) {
+      createFavorite({ doc: id }).then(res => {
+        this.$message({
+          message: '已收藏',
+          type: 'success'
+        })
+      })
+    },
     downloadMdUrl(id) {
       return downloadMd(id)
     },
@@ -240,6 +252,9 @@ export default {
           font-size: 13px;
           a {
             margin-right: 3px;
+          }
+          &-favorite {
+            color: red;
           }
         }
       }
