@@ -21,7 +21,8 @@
         </dd>
         <dd class="result-item-link">
           <router-link :to="{ name: 'Doc-View', params: { id: item.id } }" target="_blank" style="margin-right: 10px;">{{ displayViewUrl(item.id) }}</router-link>
-          <a :href="onlinePptUrl(item.id)" target="_blank">在线PPT阅读</a>
+          <!-- <a :href="onlinePptUrl(item.id)" target="_blank">在线PPT阅读</a> -->
+          <el-button type="text" @click="revealThemeDialogVisible = true; onlinepptViewedId = item.id">在线PPT阅读</el-button>
           <el-tooltip class="item" effect="dark" content="收藏" placement="top">
             <el-button type="text" class="result-item-link-favorite" @click="favorite(item.id)"><i class="el-icon-doooc-shoucang" /></el-button>
           </el-tooltip>
@@ -68,6 +69,22 @@
         </dd>
       </dl>
     </div>
+    <el-dialog
+      :visible.sync="revealThemeDialogVisible"
+      top="5vh"
+      title="选择幻灯片样式"
+      width="80%">
+      <el-row>
+        <el-col v-for="(value, key, index) in themes" :key="key" :span="6" :offset="index % 3 > 0 ? 2 : 0">
+          <el-card :body-style="{ padding: '0px' }" shadow="hover">
+            <a :href="onlinePptUrl(onlinepptViewedId, key)" target="_blank"><img :src="value" class="image" @click="onSelectTheme(key)"></a>
+            <div style="padding: 14px;">
+              <span>{{ key }}</span>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -87,6 +104,18 @@ import {
   createFavorite
 } from '@/api/doc'
 
+const beige = require('@/assets/images/reveal/beige.png')
+const black = require('@/assets/images/reveal/black.png')
+const blood = require('@/assets/images/reveal/blood.png')
+const league = require('@/assets/images/reveal/league.png')
+const moon = require('@/assets/images/reveal/moon.png')
+const night = require('@/assets/images/reveal/night.png')
+const serif = require('@/assets/images/reveal/serif.png')
+const simple = require('@/assets/images/reveal/simple.png')
+const sky = require('@/assets/images/reveal/sky.png')
+const solarized = require('@/assets/images/reveal/solarized.png')
+const white = require('@/assets/images/reveal/white.png')
+
 export default {
   name: 'Dashboard',
   data() {
@@ -99,7 +128,21 @@ export default {
       list: [],
       total: 0,
       page: 1,
-      pageSize: 10
+      pageSize: 10,
+      revealThemeDialogVisible: false,
+      themes: {
+        beige,
+        black,
+        blood,
+        league,
+        moon,
+        night,
+        serif,
+        simple,
+        sky,
+        solarized,
+        white
+      }
     }
   },
   computed: {
@@ -192,8 +235,11 @@ export default {
     downloadPptxUrl(id) {
       return downloadPptx(id)
     },
-    onlinePptUrl(id) {
-      return onlinePpt(id)
+    onlinePptUrl(id, theme) {
+      return onlinePpt(id, theme)
+    },
+    onSelectTheme(theme) {
+      this.revealThemeDialogVisible = false
     }
   }
 }
@@ -298,6 +344,18 @@ export default {
         margin-right: 10px;
         text-decoration: underline;
       }
+    }
+    .image {
+      width: 100%;
+      height: 120px;
+      display: block;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    [class*=el-col-] {
+      margin-bottom: 20px;
     }
   }
   &-text {

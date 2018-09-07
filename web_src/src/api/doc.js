@@ -104,8 +104,8 @@ export function downloadPptx(id) {
   return process.env.BASE_API + '/docs/download/pptx/' + id + '/'
 }
 
-export function onlinePpt(id) {
-  return process.env.BASE_API + '/docs/onlineppt/' + id + '/'
+export function onlinePpt(id, theme) {
+  return process.env.BASE_API + '/docs/onlineppt/' + id + '/?theme=' + theme
 }
 
 export function uploadFile() {

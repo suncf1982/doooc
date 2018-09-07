@@ -15,6 +15,7 @@ from rest_framework import serializers
 from django.http import HttpResponse, StreamingHttpResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from django.core.mail import send_mail
+from django.utils.datastructures import MultiValueDictKeyError
 import os
 from datetime import datetime
 import time
@@ -268,10 +269,14 @@ def download(pk, output_type):
 @permission_classes(())
 def online_ppt(request, pk):
     import pypandoc
+    try:
+        theme = request.GET['theme']
+    except MultiValueDictKeyError:
+        theme = 'sky'
     obj = Doc.objects.get(pk=pk)
-    output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.html'
+    output_file_name = '%s_%s%s' % (theme,obj.update_at.strftime("%Y%m%d%H%M%S%f"), '.html')
     if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
-        output = pypandoc.convert(obj.content, 'revealjs', format='md', extra_args=['-s','-V','theme=moon'])
+        output = pypandoc.convert(obj.content, 'revealjs', format='md', extra_args=['-s','-V','theme=' + theme])
         with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'w', encoding='utf8') as f:
             f.write(output)
     with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'r', encoding='utf8') as f:
