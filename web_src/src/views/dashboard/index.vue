@@ -21,7 +21,7 @@
         </dd>
         <dd class="result-item-link">
           <router-link :to="{ name: 'Doc-View', params: { id: item.id } }" target="_blank" style="margin-right: 10px;">{{ displayViewUrl(item.id) }}</router-link>
-          <a :href="'/api/docs/onlineppt/' + item.id + '/'" target="_blank">在线PPT阅读</a>
+          <a :href="onlinePptUrl(item.id)" target="_blank">在线PPT阅读</a>
           <el-tooltip class="item" effect="dark" content="收藏" placement="top">
             <el-button type="text" class="result-item-link-favorite" @click="favorite(item.id)"><i class="el-icon-doooc-shoucang" /></el-button>
           </el-tooltip>
@@ -83,6 +83,7 @@ import {
   downloadPdf,
   downloadDocx,
   downloadPptx,
+  onlinePpt,
   createFavorite
 } from '@/api/doc'
 
@@ -190,6 +191,9 @@ export default {
     },
     downloadPptxUrl(id) {
       return downloadPptx(id)
+    },
+    onlinePptUrl(id) {
+      return onlinePpt(id)
     }
   }
 }

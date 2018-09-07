@@ -104,6 +104,10 @@ export function downloadPptx(id) {
   return process.env.BASE_API + '/docs/download/pptx/' + id + '/'
 }
 
+export function onlinePpt(id) {
+  return process.env.BASE_API + '/docs/onlineppt/' + id + '/'
+}
+
 export function uploadFile() {
   return process.env.BASE_API + '/resources/upload/'
 }
