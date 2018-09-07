@@ -271,7 +271,7 @@ def online_ppt(request, pk):
     obj = Doc.objects.get(pk=pk)
     output_file_name = obj.update_at.strftime("%Y%m%d%H%M%S%f") + '.html'
     if not os.path.exists(os.path.join(FILE_CACHE_DIR, output_file_name)):
-        output = pypandoc.convert(obj.content, 'revealjs', format='md', extra_args=['-s','--self-contained','-V','theme=moon'])
+        output = pypandoc.convert(obj.content, 'revealjs', format='md', extra_args=['-s','-V','theme=moon'])
         with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'w', encoding='utf8') as f:
             f.write(output)
     with open(os.path.join(FILE_CACHE_DIR, output_file_name), 'r', encoding='utf8') as f:
