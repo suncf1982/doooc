@@ -104,17 +104,17 @@ import {
   createFavorite
 } from '@/api/doc'
 
-const beige = require('@/assets/images/reveal/beige.png')
-const black = require('@/assets/images/reveal/black.png')
-const blood = require('@/assets/images/reveal/blood.png')
-const league = require('@/assets/images/reveal/league.png')
-const moon = require('@/assets/images/reveal/moon.png')
-const night = require('@/assets/images/reveal/night.png')
-const serif = require('@/assets/images/reveal/serif.png')
-const simple = require('@/assets/images/reveal/simple.png')
-const sky = require('@/assets/images/reveal/sky.png')
-const solarized = require('@/assets/images/reveal/solarized.png')
-const white = require('@/assets/images/reveal/white.png')
+const beige = require('@/assets/images/reveal/beige.jpg')
+const black = require('@/assets/images/reveal/black.jpg')
+const blood = require('@/assets/images/reveal/blood.jpg')
+const league = require('@/assets/images/reveal/league.jpg')
+const moon = require('@/assets/images/reveal/moon.jpg')
+const night = require('@/assets/images/reveal/night.jpg')
+const serif = require('@/assets/images/reveal/serif.jpg')
+const simple = require('@/assets/images/reveal/simple.jpg')
+const sky = require('@/assets/images/reveal/sky.jpg')
+const solarized = require('@/assets/images/reveal/solarized.jpg')
+const white = require('@/assets/images/reveal/white.jpg')
 
 export default {
   name: 'Dashboard',
