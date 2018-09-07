@@ -41,6 +41,16 @@ module.exports = {
     // just be aware of this issue when enabling this option.
     cssSourceMap: false,
     proxyTable: {
+      '/api/**/reveal.js/**': {
+        target: 'http://127.0.0.1:8000/',
+        //ignorePath: true,
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: function(path, req) {
+          console.log(path)
+          return path.replace(/.*(reveal.js\/.*)/, '/static/$1')
+        }
+      },
       '/api': {
         target: 'http://127.0.0.1:8000/',
         //ignorePath: true,
