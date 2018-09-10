@@ -70,7 +70,7 @@ class DocList(generics.ListCreateAPIView):
         search_word = self.request.query_params.get('search_word', None)
         tech_stack = self.request.query_params.get('tech_stack', '')
         tag = self.request.query_params.get('tag', '')
-
+        archive = self.request.query_params.get('archive', '')
         if search_word is not None and search_word:
             PopularKeyword.objects.addKeyword(search_word)
             queryset = queryset.filter(
@@ -79,6 +79,8 @@ class DocList(generics.ListCreateAPIView):
             queryset = queryset.filter(tech_stack=tech_stack)
         if tag != '':
             queryset = queryset.filter(tags__name__in=[tag])
+        if archive != '':
+            queryset = queryset.filter(archive__id=archive)
 
         return queryset
 
@@ -117,6 +119,7 @@ class SearchList(generics.ListAPIView):
         author = self.request.query_params.get('author', '')
         tech_stack = self.request.query_params.get('tech_stack', '')
         tag = self.request.query_params.get('tag', '')
+        archive = self.request.query_params.get('archive', '')
         queryset = queryset.filter(published=True)
         if search_word is not None and search_word:
             PopularKeyword.objects.addKeyword(search_word)
@@ -128,6 +131,8 @@ class SearchList(generics.ListAPIView):
             queryset = queryset.filter(tech_stack=tech_stack)
         if tag != '':
             queryset = queryset.filter(tags__name__in=[tag])
+        if archive != '':
+            queryset = queryset.filter(archive__id=archive)
 
         return queryset
 

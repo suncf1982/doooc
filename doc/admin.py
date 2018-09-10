@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Doc, PopularKeyword, DocTemplate, Favorite
+from .models import Doc, PopularKeyword, DocTemplate, Favorite, Archive
 
 # Register your models here.
 class DocAdmin(admin.ModelAdmin):
@@ -17,3 +17,11 @@ admin.site.register(DocTemplate, DocTemplateAdmin)
 class FavoriteAdmin(admin.ModelAdmin):
     list_display  = ('doc', 'user', 'create_at')
 admin.site.register(Favorite, FavoriteAdmin)
+
+class ArchiveAdmin(admin.ModelAdmin):
+    list_display  = ('name', 'owner_first_name', 'create_at')
+
+    def owner_first_name(self, obj):
+        return obj.owner.first_name
+    owner_first_name.short_description = "拥有者"
+admin.site.register(Archive, ArchiveAdmin)

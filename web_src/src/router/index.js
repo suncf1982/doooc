@@ -54,6 +54,12 @@ export const constantRouterMap = [
         name: 'Doc-Create',
         component: () => import('@/views/doc/create'),
         meta: { title: '添加文档', icon: 'new-markdown' }
+      },
+      {
+        path: 'archive',
+        name: 'Archive-Index',
+        component: () => import('@/views/archive/index'),
+        meta: { title: '归档管理', icon: 'archive' }
       }
     ]
   },

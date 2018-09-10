@@ -93,3 +93,22 @@ class Favorite(models.Model):
 
     def __str__(self):
         return self.doc.title + '--' + self.doc.author.first_name
+
+class Archive(models.Model):
+    class Meta:
+        verbose_name = '归档整理'
+        verbose_name_plural = '归档整理'
+        unique_together = ("name", "owner")
+
+    name = models.CharField('归档名称', max_length=200)
+    owner = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE,
+        verbose_name="所属人",
+        related_name='archive_owners'
+    )
+    docs = models.ManyToManyField(Doc, verbose_name="文档", null=True, blank=True)
+    create_at = models.DateTimeField('建档日期', editable=False, auto_now_add=True)
+
+    def __str__(self):
+        return self.name
