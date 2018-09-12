@@ -4,9 +4,9 @@
       <div style="margin-bottom: 20px;">
         <a :href="downloadMdUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">MD</el-button></a>
         <a :href="downloadHtmlUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">HTML</el-button></a>
-        <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">DOCX</el-button></a>
-        <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a>
-        <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPTX</el-button></a>
+        <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">Word</el-button></a>
+        <!-- <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a> -->
+        <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPT</el-button></a>
         <el-tooltip class="item" effect="dark" content="分享" placement="top">
           <el-button type="text" style="color: #F56C6C; float: right;" @click="shareDialogVisible = true"><i class="el-icon-doooc-fenxiang" /></el-button>
         </el-tooltip>

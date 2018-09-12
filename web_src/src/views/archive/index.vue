@@ -17,6 +17,7 @@
               <span slot-scope="{ node, data }" class="custom-tree-node">
                 <span>{{ node.label }}</span>
                 <span>
+                  <el-button type="text" @click="() => onTreeNodeEdit(node, data)"><i class="el-icon-edit" /></el-button>
                   <el-button type="text" style="color: #F56C6C;" @click="() => onTreeNodeDel(node, data)"><i class="el-icon-remove" /></el-button>
                 </span>
               </span>
@@ -175,6 +176,11 @@ export default {
     },
     onTreeNodeClick(data) {
       this.getDocsOfArchive(data.id)
+    },
+    onTreeNodeEdit(node, data) {
+      this.addArchiveForm.id = data.id
+      this.addArchiveForm.name = data.name
+      this.dialogAddArchiveVisible = true
     },
     onTreeNodeDel(node, data) {
       this.$confirm('确认删除吗？', '提示', {}).then(() => {

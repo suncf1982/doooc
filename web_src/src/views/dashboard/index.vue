@@ -35,9 +35,9 @@
           <el-tooltip class="item" effect="dark" content="下载WORD文件" placement="top">
             <a :href="downloadDocxUrl(item.id)" download><el-button type="text" icon="el-icon-doooc-word" size="medium" /></a>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="下载PDF文件" placement="top">
+          <!-- <el-tooltip class="item" effect="dark" content="下载PDF文件" placement="top">
             <a :href="downloadPdfUrl(item.id)" download><el-button type="text" icon="el-icon-doooc-pdf" size="medium" /></a>
-          </el-tooltip>
+          </el-tooltip> -->
           <el-tooltip class="item" effect="dark" content="下载PPT文件" placement="top">
             <a :href="downloadPptxUrl(item.id)" download><el-button type="text" icon="el-icon-doooc-ppt" size="medium" /></a>
           </el-tooltip>

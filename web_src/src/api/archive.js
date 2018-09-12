@@ -45,3 +45,10 @@ export function removeDoc(archiveId, docId) {
   })
 }
 
+export function addDoc(archiveId, docId) {
+  return request({
+    url: '/archives/' + archiveId + '/' + docId + '/',
+    method: 'post'
+  })
+}
+

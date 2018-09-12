@@ -52,6 +52,9 @@
             <el-tooltip class="item" effect="dark" content="预览" placement="top">
               <router-link :to="{ name: 'Doc-View', params: { id: scope.row.id } }" target="_blank" style="color: #409EFF;"><i class="el-icon-view" /></router-link>
             </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="归档" placement="top">
+              <el-button type="text" style="color: #409EFF;" @click="onAddToArchive(scope.$index, scope.row)"><i class="el-icon-doooc-guidang" /></el-button>
+            </el-tooltip>
             <el-tooltip class="item" effect="dark" content="修改" placement="top">
               <router-link :to="{ name: 'Doc-Create', query: { id: scope.row.id }}"><el-button type="text"><i class="el-icon-edit" /></el-button></router-link>
             </el-tooltip>
@@ -89,18 +92,29 @@
           :navigation="true"
           default-open="preview"/>
       </el-dialog>
+      <el-dialog
+        :visible.sync="archiveSelectDialogVisible"
+        title="请选择归档"
+        width="30%">
+        <archive-select @selectedArchiveId="selectedArchive" />
+      </el-dialog>
     </div>
   </section>
 </template>
 
 <script>
 import { getList, del, publish, downloadMd, downloadHtml, downloadPdf, downloadDocx, downloadPptx } from '@/api/doc'
+import { addDoc as addDocToArchive } from '@/api/archive'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
+import archiveSelect from '../archive/popup'
 
 moment.locale('zh-cn')
 
 export default {
+  components: {
+    archiveSelect
+  },
   filters: {
     publishedFilter(published) {
       return published ? 'success' : 'info'
@@ -125,7 +139,9 @@ export default {
       viewDocDialogVisible: false,
       viewedDoc: {
         content: ''
-      }
+      },
+      archiveSelectDialogVisible: false,
+      selectedArchiveId: ''
     }
   },
   computed: {
@@ -172,6 +188,20 @@ export default {
             type: 'success'
           })
           this.fetchData()
+        })
+      })
+    },
+    onAddToArchive(index, row) {
+      this.docOfPrepareToAddArchive = row.id
+      this.archiveSelectDialogVisible = true
+    },
+    selectedArchive(v) {
+      this.archiveSelectDialogVisible = false
+      this.selectedArchiveId = v
+      addDocToArchive(v, this.docOfPrepareToAddArchive).then(res => {
+        this.$message({
+          message: '归档成功',
+          type: 'success'
         })
       })
     },

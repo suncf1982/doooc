@@ -37,7 +37,7 @@ class ArchiveDetail(APIView):
 
     def put(self, request, pk, format=None):
         obj = self.get_object(pk)
-        serializer = ArchiveSerializer(obj, data=request.data)
+        serializer = ArchiveSerializer(obj, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -48,12 +48,16 @@ class ArchiveDetail(APIView):
         obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['delete'])
+@api_view(['post','delete'])
 def remove_doc(request, archive_id, doc_id):
     try:
         archive = Archive.objects.get(pk=archive_id)
         doc = Doc.objects.get(pk=doc_id)
-        archive.docs.remove(doc)
+        if request.method == 'POST':
+            archive.docs.add(doc)
+        elif request.method == 'DELETE':
+            archive.docs.remove(doc)
+
     except Archive.DoesNotExist:
         raise Http404
     except Doc.DoesNotExist:
