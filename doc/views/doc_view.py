@@ -1,31 +1,30 @@
-from ..models import Doc, PopularKeyword
-from ..serializers import DocSerializer, DocReadonlySerializer, UserKVSerializer
+'''
+文档管理
+'''
 
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
-from rest_framework.decorators import api_view
-from rest_framework import generics
-from rest_framework.pagination import LimitOffsetPagination
+import os
+import time
+from datetime import datetime
+from django.http import Http404, HttpResponse
 from django.db.models import Q
-from django.db.models import Count
-from rest_framework import serializers
-from django.http import HttpResponse, StreamingHttpResponse
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from django.core.mail import send_mail
 from django.utils.datastructures import MultiValueDictKeyError
-import os
-from datetime import datetime
-import time
+from rest_framework import status, generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from doooc import settings
+from ..models import Doc, PopularKeyword
+from ..serializers import DocSerializer, DocReadonlySerializer, UserKVSerializer
 
 FILE_CACHE_DIR = os.path.join(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))), 'filecache')
 
 
 class DocList(generics.ListCreateAPIView):
+    '''
+    列表、新增
+    '''
     queryset = Doc.objects.all()
     serializer_class = DocReadonlySerializer
 
@@ -85,6 +84,9 @@ class DocList(generics.ListCreateAPIView):
         return queryset
 
 class SearchList(generics.ListAPIView):
+    '''
+    搜索
+    '''
     queryset = Doc.objects.all()
     serializer_class = DocReadonlySerializer
 
@@ -138,6 +140,10 @@ class SearchList(generics.ListAPIView):
 
 
 class DocDetail(APIView):
+    '''
+    获取、更新、删除
+    '''
+    
     # TODO: 主要是为了把get的权限放开，目前的做法put和delete的权限也放开了，需改进
     authentication_classes = (())
     permission_classes = (())
@@ -183,7 +189,9 @@ def publish(request, pk):
 @authentication_classes(())
 @permission_classes(())
 def download_md(request, pk):
-    import pypandoc
+    '''
+    下载md格式文件
+    '''
     obj = Doc.objects.get(pk=pk)
     obj.download_times = obj.download_times + 1
     obj.save()
@@ -197,6 +205,9 @@ def download_md(request, pk):
 @authentication_classes(())
 @permission_classes(())
 def download_html(request, pk):
+    '''
+    下载html格式文件
+    '''
     import pypandoc
     obj = Doc.objects.get(pk=pk)
     obj.download_times = obj.download_times + 1
@@ -219,6 +230,9 @@ def download_html(request, pk):
 @authentication_classes(())
 @permission_classes(())
 def download_pdf(request, pk):
+    '''
+    下载pdf格式文件
+    '''
     import pypandoc
     obj = Doc.objects.get(pk=pk)
     obj.download_times = obj.download_times + 1
@@ -240,6 +254,9 @@ def download_pdf(request, pk):
 @authentication_classes(())
 @permission_classes(())
 def download_docx(request, pk):
+    '''
+    下载word格式文件
+    '''
     response = download(pk, 'docx')
     return response
 
@@ -247,6 +264,9 @@ def download_docx(request, pk):
 @authentication_classes(())
 @permission_classes(())
 def download_pptx(request, pk):
+    '''
+    下载ppt格式文件
+    '''
     response = download(pk, 'pptx')
     return response
 

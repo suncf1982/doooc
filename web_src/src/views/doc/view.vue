@@ -2,14 +2,15 @@
   <section>
     <div class="app-container view-doc">
       <div style="margin-bottom: 20px;">
-        <a :href="downloadMdUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">MD</el-button></a>
-        <a :href="downloadHtmlUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">HTML</el-button></a>
-        <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">Word</el-button></a>
-        <!-- <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a> -->
-        <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPT</el-button></a>
-        <el-tooltip class="item" effect="dark" content="分享" placement="top">
-          <el-button type="text" style="color: #F56C6C; float: right;" @click="shareDialogVisible = true"><i class="el-icon-doooc-fenxiang" /></el-button>
-        </el-tooltip>
+        <el-button type="text" icon="el-icon-printer" size="small" @click="print">打印</el-button>
+        <el-button type="text" icon="el-icon-doooc-fenxiang" @click="shareDialogVisible = true">分享</el-button>
+        <div style="display: inline-block; float: right;">
+          <a :href="downloadMdUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">MD</el-button></a>
+          <a :href="downloadHtmlUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">HTML</el-button></a>
+          <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">Word</el-button></a>
+          <!-- <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a> -->
+          <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPT</el-button></a>
+        </div>
       </div>
       <mavon-editor
         v-model="document.content"
@@ -89,6 +90,14 @@ export default {
       share(this.document.id, this.share_to).then(res => {
         this.shareDialogVisible = false
       })
+    },
+    print() {
+      const newhtml = document.getElementsByClassName('v-note-show')[0].innerHTML
+      const oldhtml = document.body.innerHTML
+      document.body.innerHTML = newhtml
+      window.print()
+      window.location.reload()
+      document.body.innerHTML = oldhtml
     }
   }
 }
