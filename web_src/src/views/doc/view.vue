@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="app-container view-doc">
-      <div style="margin-bottom: 20px;">
+      <div style="margin-bottom: 10px;">
         <el-button type="text" icon="el-icon-printer" size="small" @click="print">打印</el-button>
         <el-button type="text" icon="el-icon-doooc-fenxiang" @click="shareDialogVisible = true">分享</el-button>
         <div style="display: inline-block; float: right;">
@@ -109,6 +109,9 @@ export default {
   .markdown-body {
     font-size: 14px;
   }
+  .v-note-navigation-title{
+    display: none;
+  }
   .v-note-wrapper .v-note-panel .v-note-navigation-wrapper .v-note-navigation-title {
     font-size: 16px;
   }
@@ -120,6 +123,13 @@ export default {
   }
   .v-note-navigation-close {
     display: none;
+  }
+  .v-note-wrapper .v-note-panel.shadow {
+    border: none;
+    box-shadow: none;
+  }
+  .v-note-wrapper .v-note-panel .v-note-show .v-show-content, .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html {
+    background: #fff;
   }
 }
 </style>
