@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="app-container view-doc">
-      <div style="margin-bottom: 10px;">
+      <div style="    padding-bottom: 10px;border-bottom: solid 1px #eaecef;">
         <el-button type="text" icon="el-icon-printer" size="small" @click="print">打印</el-button>
         <el-button type="text" icon="el-icon-doooc-fenxiang" @click="shareDialogVisible = true">分享</el-button>
         <div style="display: inline-block; float: right;">
@@ -120,6 +120,8 @@ export default {
   }
   .v-note-navigation-wrapper {
     left: 0;
+    border-right: solid 1px #eaecef !important;
+    box-shadow: none !important;
   }
   .v-note-navigation-close {
     display: none;
