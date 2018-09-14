@@ -1,15 +1,15 @@
 <template>
   <section>
     <div class="app-container view-doc">
-      <div style="    padding-bottom: 10px;border-bottom: solid 1px #eaecef;">
-        <el-button type="text" icon="el-icon-printer" size="small" @click="print">打印</el-button>
-        <el-button type="text" icon="el-icon-doooc-fenxiang" @click="shareDialogVisible = true">分享</el-button>
+      <div class="op">
+        <el-button type="text" icon="el-icon-printer" class="op-print" @click="print">打印</el-button>
+        <el-button type="text" icon="el-icon-doooc-fenxiang" class="op-share" @click="shareDialogVisible = true">分享</el-button>
         <div style="display: inline-block; float: right;">
-          <a :href="downloadMdUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">MD</el-button></a>
-          <a :href="downloadHtmlUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">HTML</el-button></a>
-          <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">Word</el-button></a>
-          <!-- <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PDF</el-button></a> -->
-          <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="small">PPT</el-button></a>
+          <a :href="downloadMdUrl(document.id)" download class="op-download-md"><el-button type="primary" icon="el-icon-download" size="mini" plain>MD</el-button></a>
+          <a :href="downloadHtmlUrl(document.id)" download class="op-download-html"><el-button type="primary" icon="el-icon-download" size="mini" plain>HTML</el-button></a>
+          <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="mini" plain>Word</el-button></a>
+          <!-- <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="mini" plain>PDF</el-button></a> -->
+          <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="mini" plain>PPT</el-button></a>
         </div>
       </div>
       <mavon-editor
@@ -22,8 +22,8 @@
 
       <el-dialog :visible.sync="shareDialogVisible" title="分享文档">
         <el-form>
-          <el-form-item label="邮箱地址" label-width="100px">
-            <el-input v-model="share_to" auto-complete="off" />
+          <el-form-item label="">
+            <el-input v-model="share_to" auto-complete="off" placeholder="邮箱" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -117,11 +117,18 @@ export default {
   }
   .v-note-show {
     padding-left: 250px !important;
+    @media screen and (max-width:768px) {
+      padding-left: 0 !important;
+    }
   }
   .v-note-navigation-wrapper {
     left: 0;
     border-right: solid 1px #eaecef !important;
     box-shadow: none !important;
+
+    @media screen and (max-width:768px) {
+      display: none !important;
+    }
   }
   .v-note-navigation-close {
     display: none;
@@ -132,6 +139,16 @@ export default {
   }
   .v-note-wrapper .v-note-panel .v-note-show .v-show-content, .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html {
     background: #fff;
+  }
+  .op {
+    padding-bottom: 10px;
+    border-bottom: solid 1px #eaecef;
+    &-print, &-download-md, &-download-html {
+      @media screen and (max-width:768px) {
+        display: none !important;
+      }
+    }
+    
   }
 }
 </style>
