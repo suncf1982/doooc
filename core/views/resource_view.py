@@ -16,4 +16,4 @@ def upload(request):
   instance.storage = file
   instance.save()
 
-  return JsonResponse({'url': instance.storage.url})
+  return JsonResponse({'id': instance.id, 'name': instance.name, 'url': instance.storage.url})

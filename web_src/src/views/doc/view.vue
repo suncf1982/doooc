@@ -19,7 +19,9 @@
         :navigation="true"
         default-open="preview"
         font-size="14px" />
-
+      <div class="attachment">
+        <a v-for="(attachment, index) in document.attachments" :key="index" :href="downloadAttachment(attachment.url)" download><el-button type="text" icon="el-icon-tickets"> {{ attachment.name }} </el-button></a>
+      </div>
       <el-dialog :visible.sync="shareDialogVisible" title="分享文档">
         <el-form>
           <el-form-item label="">
@@ -44,7 +46,8 @@ import {
   downloadPdf,
   downloadDocx,
   downloadPptx,
-  share
+  share,
+  downloadFile
 } from '@/api/doc'
 
 export default {
@@ -86,6 +89,9 @@ export default {
     downloadPptxUrl(id) {
       return downloadPptx(id)
     },
+    downloadAttachment(url) {
+      return downloadFile(url)
+    },
     share() {
       share(this.document.id, this.share_to).then(res => {
         this.shareDialogVisible = false
@@ -115,10 +121,16 @@ export default {
   .v-note-wrapper .v-note-panel .v-note-navigation-wrapper .v-note-navigation-title {
     font-size: 16px;
   }
-  .v-note-show {
+  .v-note-show, .attachment {
     padding-left: 250px !important;
     @media screen and (max-width:768px) {
       padding-left: 0 !important;
+    }
+  }
+  .attachment {
+    margin-top: 20px;
+    a {
+      display: block;
     }
   }
   .v-note-navigation-wrapper {
@@ -148,7 +160,6 @@ export default {
         display: none !important;
       }
     }
-    
   }
 }
 </style>

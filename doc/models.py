@@ -3,11 +3,13 @@ from django.utils import timezone
 from taggit.managers import TaggableManager
 from .enums import TECH_STACK
 from datetime import datetime
+from core.models import Resource
 
 # Create your models here.
-
-
 class Doc(models.Model):
+    '''
+    文档
+    '''
     class Meta:
         ordering = ["-update_at"]
         verbose_name = '文档'
@@ -25,6 +27,7 @@ class Doc(models.Model):
     tags = TaggableManager(verbose_name="标签")
     download_times = models.IntegerField('下载次数', default=0)
     published = models.BooleanField('发布', default=False, editable=True)
+    attachments = models.ManyToManyField(Resource, verbose_name="附件", null=True, blank=True)
     create_at = models.DateTimeField('创建日期', editable=False, auto_now_add=True)
     update_at = models.DateTimeField('更新日期', editable=True, default=timezone.now)
 

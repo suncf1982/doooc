@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
+from .models import Resource
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -63,3 +64,9 @@ class UserSerializer(serializers.ModelSerializer):
             instance.groups.add(g_id)
         instance.save()
         return instance
+
+class ResourceSerializer(serializers.ModelSerializer):
+    url = serializers.FileField(source='storage')
+    class Meta:
+        model = Resource
+        fields = '__all__'

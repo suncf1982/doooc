@@ -34,6 +34,17 @@
           <el-button v-show="addingTag" type="danger" icon="el-icon-close" size="mini" title="取消" circle @click.native="onCancelAddTag()" />
         </el-form-item>
         <el-form-item>
+          <el-upload
+            ref="uploadAttachment"
+            :action="uploadUrl()"
+            :file-list="addForm.attachments"
+            :on-success="onAttachmentUploadSuccess"
+            :auto-upload="false">
+            <el-button slot="trigger" size="small" type="primary" icon="el-icon-check">选取附件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" icon="el-icon-upload2" @click="onSubmitUpload">上传</el-button>
+          </el-upload>
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" icon="el-icon-doooc-baocun" size="small" @click.native="onSubmit('form')">保存</el-button>
         </el-form-item>
       </el-form>
@@ -73,7 +84,8 @@ const form = {
   author: '',
   content: '',
   tech_stack: '',
-  tags: []
+  tags: [],
+  attachments: []
 }
 export default {
   name: 'CreateDoc',
@@ -126,6 +138,9 @@ export default {
         this.$refs.md.$img2Url(pos, file_url)
       })
     },
+    uploadUrl() {
+      return uploadFile()
+    },
     onAddTag() {
       this.addingTag = true
     },
@@ -146,6 +161,7 @@ export default {
         if (valid) {
           this.addLoading = true
           const param = Object.assign({}, this.addForm)
+          param.attachments = this.formatAttachmentParameter(this.addForm.attachments)
           if (param.id === undefined) {
             create(param).then(res => {
               this.addLoading = false
@@ -188,6 +204,15 @@ export default {
         this.addForm.title = res.template.name
         this.selTplDialogVisible = false
       })
+    },
+    onSubmitUpload() {
+      this.$refs.uploadAttachment.submit()
+    },
+    onAttachmentUploadSuccess(response) {
+      this.addForm.attachments.push(response)
+    },
+    formatAttachmentParameter() {
+      return this.addForm.attachments.map((item) => { return item.id })
     }
   }
 }

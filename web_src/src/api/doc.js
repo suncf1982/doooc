@@ -112,6 +112,10 @@ export function uploadFile() {
   return process.env.BASE_API + '/resources/upload/'
 }
 
+export function downloadFile(url) {
+  return process.env.BASE_API + url
+}
+
 export function getTemplates(params) {
   return request({
     url: '/docs/templates/',

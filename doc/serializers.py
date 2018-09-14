@@ -2,7 +2,7 @@ from .models import Doc, PopularKeyword, DocTemplate, Favorite, Archive
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
 from taggit_serializer.serializers import (TagListSerializerField, TaggitSerializer)
-from core.serializers import UserReadonlySerializer
+from core.serializers import UserReadonlySerializer, ResourceSerializer
 from .enums import all_enums
 
 
@@ -19,6 +19,7 @@ class DocReadonlySerializer(TaggitSerializer, serializers.ModelSerializer):
     author_name = serializers.CharField(source='author.first_name')
     tech_stack_name = serializers.CharField(source='get_tech_stack_display', read_only=True)
     tags = TagListSerializerField()
+    attachments = ResourceSerializer(read_only=True, many=True)
     create_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', allow_null=True, required=False)
     update_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', allow_null=True, required=False)
     class Meta:
