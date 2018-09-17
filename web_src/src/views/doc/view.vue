@@ -4,9 +4,9 @@
       <div class="op">
         <el-button type="text" icon="el-icon-printer" class="op-print" @click="print">打印</el-button>
         <el-button type="text" icon="el-icon-doooc-fenxiang" class="op-share" @click="shareDialogVisible = true">分享</el-button>
-        <div style="display: inline-block; float: right;">
-          <a :href="downloadMdUrl(document.id)" download class="op-download-md"><el-button type="primary" icon="el-icon-download" size="mini" plain>MD</el-button></a>
-          <a :href="downloadHtmlUrl(document.id)" download class="op-download-html"><el-button type="primary" icon="el-icon-download" size="mini" plain>HTML</el-button></a>
+        <div class="op-download">
+          <a :href="downloadMdUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="mini" plain>MD</el-button></a>
+          <a :href="downloadHtmlUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="mini" plain>HTML</el-button></a>
           <a :href="downloadDocxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="mini" plain>Word</el-button></a>
           <!-- <a :href="downloadPdfUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="mini" plain>PDF</el-button></a> -->
           <a :href="downloadPptxUrl(document.id)" download><el-button type="primary" icon="el-icon-download" size="mini" plain>PPT</el-button></a>
@@ -95,6 +95,10 @@ export default {
     share() {
       share(this.document.id, this.share_to).then(res => {
         this.shareDialogVisible = false
+        this.$message({
+          message: '发送成功',
+          type: 'success'
+        })
       })
     },
     print() {
@@ -155,7 +159,14 @@ export default {
   .op {
     padding-bottom: 10px;
     border-bottom: solid 1px #eaecef;
-    &-print, &-download-md, &-download-html {
+    &-download {
+      display: block;
+      float: right;
+      @media screen and (max-width:768px) {
+        display: none !important;
+      }
+    }
+    &-print {
       @media screen and (max-width:768px) {
         display: none !important;
       }

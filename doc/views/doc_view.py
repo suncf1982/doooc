@@ -7,7 +7,7 @@ import time
 from datetime import datetime
 from django.http import Http404, HttpResponse
 from django.db.models import Q
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.utils.datastructures import MultiValueDictKeyError
 from rest_framework import status, generics
 from rest_framework.views import APIView
@@ -323,13 +323,21 @@ def share(request, pk):
     share_to = request.data['share_to']
     try:
         obj = Doc.objects.get(pk=pk)
-        send_mail(
-            '来自于xxx平台的共享文档',
-            obj.title,
-            settings.EMAIL_HOST_USER,
-            [share_to],
-            fail_silently=False,
-        )
+        url = request.build_absolute_uri('/#/view/' + str(obj.id))
+        # send_mail(
+        #     '来自于xxx平台的共享文档',
+        #     obj.title,
+        #     settings.EMAIL_HOST_USER,
+        #     [share_to],
+        #     fail_silently=False,
+        # )
+        subject = obj.title
+        text_content = ''
+        html_content = '<p>有人给您分享了一篇文档： <a href="'+ url +'">'+ url +'</a></p>'
+        html_content += '<br /><br />本邮件是由 <a href="'+ request.build_absolute_uri('/') +'">DOOOC</a> 平台发出'
+        msg = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER, [share_to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
     except Doc.DoesNotExist:
         raise Http404
 
