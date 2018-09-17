@@ -5,6 +5,11 @@
 &emsp;&emsp;可作为个人、团队或公司的项目文档管理使用
 &emsp;&emsp;项目时基于django、vue2等开源框架开发，涉及比较多的技术，可以作为个人学习之参考。
 
+### 截图
+![jiansuo.gif](http://121.42.144.73/media/uploads/2018/09/17/jiansuo.gif)
+
+![onlineppt.gif](http://121.42.144.73/media/uploads/2018/09/17/onlineppt.gif)
+
 ### 软件架构
 &emsp;&emsp;项目使用Django作为基础开发框架；前端采用Vue2+Element UI
 ；数据库支持mysql、sqlite等常用的关系型数据库；使用pandoc进行pdf，word，ppt等格式的转换。
